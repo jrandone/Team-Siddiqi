@@ -753,7 +753,7 @@
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce copy-slot" data-slot="announcement">
-  <span class="give">All proceeds after expenses are donated to our cause</span>
+  <span class="give">All proceeds are donated to our cause</span>
 </div>
 
 <!-- NAV -->
@@ -792,7 +792,7 @@
 
     <p class="hero-note copy-slot" data-slot="hero bismillah note"><span class="bismillah">Bismillah</span> means in the name of Allah (or God)—said before the start of any action. You got this— with God by your side, you <strong>CAN</strong> do anything with the right mindset.</p>
 
-    <p class="hero-sub copy-slot" data-slot="hero subhead">A small collection, built to last. <em>Every order gives back</em> — all proceeds after expenses are donated to our cause.</p>
+    <p class="hero-sub copy-slot" data-slot="hero subhead">A small collection, built to last. <em>Every order gives back</em> — all proceeds are donated to our cause.</p>
 
     <div class="hero-ctas">
       <button class="btn-primary" onclick="scrollToShop()">
@@ -807,7 +807,7 @@
 
 <!-- MISSION STRIP -->
 <div class="mission-strip copy-slot" data-slot="mission strip">
-  <strong>All proceeds after expenses</strong> are donated to <strong>our cause</strong>.
+  <strong>All proceeds</strong> are donated to <strong>our cause</strong>.
 </div>
 
 <!-- PRODUCT GRID -->
@@ -844,7 +844,7 @@
           <span class="swatch" style="background: #3F3F3F;" title="Dark Grey"></span>
           <span class="swatch" style="background: #0A1F44;" title="Navy Blue"></span>
         </div>
-        <div class="card-give">All proceeds after expenses are donated to our cause</div>
+        <div class="card-give">All proceeds are donated to our cause</div>
         <button class="card-shop-btn" type="button" onclick="event.stopPropagation(); openPDP('hoodie');">Shop Now →</button>
       </div>
     </div>
@@ -919,7 +919,7 @@
   <div class="container">
     <div class="eyebrow mono-caps" style="color: var(--muted); margin-bottom: 24px;">Why We Give</div>
     <h2 class="serif big copy-slot" data-slot="cause hero line"><em>Given back.</em></h2>
-    <p class="copy-slot" data-slot="cause paragraph">Water should not be a privilege. Everyone should have access. All proceeds after expenses are donated to the <strong>Paani Project</strong>. We will keep you posted quarterly here on our progress towards our cause. Thank you for your support and contributions!</p>
+    <p class="copy-slot" data-slot="cause paragraph">Water should not be a privilege. Everyone should have access. All proceeds are donated to the <strong>Paani Project</strong>. We will keep you posted quarterly here on our progress towards our cause. Thank you for your support and contributions!</p>
     <p style="margin-top: 20px;">
       <a href="https://paaniproject.org/" target="_blank" rel="noopener" class="btn-secondary">Learn more about the Paani Project →</a>
     </p>
@@ -989,7 +989,7 @@
     </div>
   </div>
   <div class="drawer-foot hidden" id="drawerFoot">
-    <div class="drawer-give" id="drawerGive">All proceeds after expenses are donated to our cause.</div>
+    <div class="drawer-give" id="drawerGive">All proceeds are donated to our cause.</div>
     <div class="subtotal-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
     <div class="ship-note">Shipping, taxes, and discounts calculated at checkout.</div>
     <button class="btn-primary" onclick="openCheckout()">Checkout <span class="arrow">→</span></button>
@@ -1009,10 +1009,10 @@
       <div class="pdp-price-row">
         <div class="pdp-price" id="pdpPrice">$45</div>
       </div>
-      <div class="pdp-give-inline" id="pdpGive">♡ All proceeds after expenses are donated to our cause</div>
+      <div class="pdp-give-inline" id="pdpGive">♡ All proceeds are donated to our cause</div>
 
       <p class="pdp-desc copy-slot" data-slot="PDP description" id="pdpDesc">
-        Relaxed fit, built to become your go-to. Every order gives back — all proceeds after expenses are donated to our cause.
+        Relaxed fit, built to become your go-to. Every order gives back — all proceeds are donated to our cause.
       </p>
 
       <div class="pdp-group">
@@ -1129,7 +1129,7 @@
         { src: 'assets/hoodie_front_detail.jpg' },
         { src: 'assets/hero_lifestyle.jpg' },
       ],
-      desc: 'Relaxed fit, built to become your go-to. Offered in Adult, Youth, and Toddler fits. Every order gives back — all proceeds after expenses are donated to our cause.',
+      desc: 'Relaxed fit, built to become your go-to. Offered in Adult, Youth, and Toddler fits. Every order gives back — all proceeds are donated to our cause.',
       tiers: {
         'Adult S–XL': {
           price: 45,
@@ -1188,7 +1188,7 @@
         { src: 'assets/hero_lifestyle.jpg' },
         { src: 'assets/hoodie_back.jpg' },
       ],
-      desc: 'Tapered fit with ribbed cuffs and deep pockets, built for the grind. Every order gives back — all proceeds after expenses are donated to our cause.'
+      desc: 'Tapered fit with ribbed cuffs and deep pockets, built for the grind. Every order gives back — all proceeds are donated to our cause.'
     }
   };
 
@@ -1280,7 +1280,7 @@
       </div>
     `).join('');
 
-    document.getElementById('drawerGive').textContent = 'All proceeds after expenses are donated to our cause.';
+    document.getElementById('drawerGive').textContent = 'All proceeds are donated to our cause.';
   }
 
   // ==================== UI TOGGLES ====================
@@ -1302,7 +1302,7 @@
     // populate shared fields
     document.getElementById('pdpTitle').textContent = currentProduct.name;
     document.getElementById('pdpCategory').textContent = currentProduct.category;
-    document.getElementById('pdpGive').innerHTML = `♡ All proceeds after expenses are donated to ${BRAND.causeName}`;
+    document.getElementById('pdpGive').innerHTML = `♡ All proceeds are donated to ${BRAND.causeName}`;
     document.getElementById('pdpDesc').textContent = currentProduct.desc;
 
     const g = document.getElementById('pdpGallery');
