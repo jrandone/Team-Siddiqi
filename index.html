@@ -395,6 +395,14 @@
   .size-pill:hover { border-color: var(--ink); }
   .size-pill.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
   .size-pill.oos { color: var(--muted-2); text-decoration: line-through; cursor: not-allowed; background: transparent; }
+  .tiers { display: flex; flex-wrap: wrap; gap: 6px; }
+  .tier-pill {
+    border: 1px solid var(--line); padding: 10px 14px; font-size: 12px;
+    letter-spacing: 0.04em; cursor: pointer; background: var(--cream); white-space: nowrap;
+    transition: background .15s var(--ease), border-color .15s var(--ease), color .15s var(--ease);
+  }
+  .tier-pill:hover { border-color: var(--ink); }
+  .tier-pill.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
   .pdp-add { width: 100%; padding: 20px; background: var(--ink); color: var(--cream); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; transition: background .2s var(--ease); }
   .pdp-add:hover { background: #2a2622; }
   .pdp-express { width: 100%; padding: 16px; background: #5A31F4; color: #fff; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
@@ -817,14 +825,17 @@
         <div class="card-body">
           <div>
             <div class="card-name">The Bismillah Sweatshirt</div>
-            <div class="card-sub">Heavyweight fleece · Sand</div>
+            <div class="card-sub">Heavyweight fleece · Adult, Youth &amp; Toddler</div>
           </div>
-          <div class="card-price">$45</div>
+          <div class="card-price">From $25</div>
         </div>
         <div class="card-swatches">
-          <span class="swatch" style="background: #C8B194;" title="Sand"></span>
-          <span class="swatch" style="background: #0D0D0D;" title="Black"></span>
-          <span class="swatch" style="background: #E9E4DA;" title="Bone"></span>
+          <span class="swatch" style="background: #C8B194;" title="Sand/Tan"></span>
+          <span class="swatch" style="background: #7BA4DB;" title="Carolina Blue"></span>
+          <span class="swatch" style="background: #F4C2C2;" title="Light Pink"></span>
+          <span class="swatch" style="background: #A3D9B1;" title="Mint Green"></span>
+          <span class="swatch" style="background: #3F3F3F;" title="Dark Grey"></span>
+          <span class="swatch" style="background: #0A1F44;" title="Navy Blue"></span>
         </div>
         <div class="card-give">100% of proceeds support the cause</div>
       </div>
@@ -1047,7 +1058,7 @@
       <div class="pdp-bread"><a href="#" onclick="closePDP();return false;">Shop</a> / <span id="pdpCategory">Hoodies</span></div>
       <h1 class="pdp-title serif" id="pdpTitle">The Bismillah Hoodie</h1>
       <div class="pdp-price-row">
-        <div class="pdp-price" id="pdpPrice">$88</div>
+        <div class="pdp-price" id="pdpPrice">$45</div>
       </div>
       <div class="pdp-give-inline" id="pdpGive">♡ 100% of proceeds support our cause</div>
 
@@ -1056,27 +1067,21 @@
       </p>
 
       <div class="pdp-group">
-        <div class="lbl"><span>Color — <span id="pdpColorName">Sand</span></span></div>
-        <div class="swatches">
-          <div class="sw-big active" style="background: #C8B194;" onclick="setColor(this,'Sand')"></div>
-          <div class="sw-big" style="background: #0D0D0D;" onclick="setColor(this,'Black')"></div>
-          <div class="sw-big" style="background: #E9E4DA;" onclick="setColor(this,'Bone')"></div>
-        </div>
+        <div class="lbl"><span>Fit — <span id="pdpTierName">Adult S–XL</span></span></div>
+        <div class="tiers" id="pdpTiers"></div>
+      </div>
+
+      <div class="pdp-group">
+        <div class="lbl"><span>Color — <span id="pdpColorName">Sand/Tan</span></span></div>
+        <div class="swatches" id="pdpSwatches"></div>
       </div>
 
       <div class="pdp-group">
         <div class="lbl"><span>Size</span><a href="#" onclick="event.preventDefault()">Size guide</a></div>
-        <div class="sizes">
-          <div class="size-pill">XS</div>
-          <div class="size-pill">S</div>
-          <div class="size-pill active">M</div>
-          <div class="size-pill">L</div>
-          <div class="size-pill">XL</div>
-          <div class="size-pill oos">XXL</div>
-        </div>
+        <div class="sizes" id="pdpSizes"></div>
       </div>
 
-      <button class="pdp-add" onclick="addCurrentToBag()">Add to Bag — <span id="pdpAddPrice">$88</span></button>
+      <button class="pdp-add" onclick="addCurrentToBag()">Add to Bag — <span id="pdpAddPrice">$45</span></button>
 
       <div class="pdp-ship">
         <span>◎ Free shipping over $100</span>
@@ -1094,7 +1099,7 @@
           <button class="acc-head" onclick="toggleAcc(this)">
             <span>Shipping & Returns</span><span class="plus">+</span>
           </button>
-          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">Free US shipping over $75, otherwise $6 flat. Standard 3–5 business days. Free 30-day returns on unworn items with tags — full <a href="pages/shipping.html" style="text-decoration:underline;">shipping</a> &amp; <a href="pages/returns.html" style="text-decoration:underline;">returns</a> policy.</p></div>
+          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">Free US shipping over $100, otherwise $6 flat. Standard 3–5 business days. 30-day returns on unworn items with tags (return shipping at your cost) — full <a href="pages/shipping.html" style="text-decoration:underline;">shipping</a> &amp; <a href="pages/returns.html" style="text-decoration:underline;">returns</a> policy.</p></div>
         </div>
         <div class="acc-item">
           <button class="acc-head" onclick="toggleAcc(this)">
@@ -1167,21 +1172,58 @@
   const PRODUCTS = {
     hoodie: {
       id: 'hoodie',
-      name: 'The Bismillah Hoodie',
-      category: 'Hoodies',
-      sub: 'Heavyweight fleece · Sand',
-      price: 45,
-      give: 45,
-      color: 'Sand',
-      colors: ['Sand', 'Black', 'Bone'],
-      sizes: ['XS', 'S', 'M', 'L', 'XL'],
+      name: 'The Bismillah Sweatshirt',
+      category: 'Sweatshirts',
+      sub: 'Heavyweight fleece',
+      color: 'Sand/Tan',
       images: [
         { src: 'assets/hoodie_back.jpg', wide: true },
         { src: 'assets/hoodie_front_detail.jpg' },
         { src: 'assets/hero_lifestyle.jpg' },
         { src: 'assets/joggers_lifestyle.jpg' },
       ],
-      desc: 'Heavyweight 100% cotton fleece. Relaxed fit, built to become your go-to. Every order gives back — 100% of proceeds support our cause.'
+      desc: 'Heavyweight 100% cotton fleece. Relaxed fit, built to become your go-to. Offered in Adult, Youth, and Toddler fits. Every order gives back — 100% of proceeds support our cause.',
+      tiers: {
+        'Adult S–XL': {
+          price: 45,
+          sizes: ['S', 'M', 'L', 'XL'],
+          colors: [
+            { name: 'Sand/Tan',      hex: '#C8B194' },
+            { name: 'Carolina Blue', hex: '#7BA4DB' },
+            { name: 'Light Pink',    hex: '#F4C2C2' },
+            { name: 'Mint Green',    hex: '#A3D9B1' },
+            { name: 'Dark Grey',     hex: '#3F3F3F' },
+          ],
+        },
+        'Adult 2XL–4XL': {
+          price: 48,
+          sizes: ['2XL', '3XL', '4XL'],
+          colors: [
+            { name: 'Sand/Tan',      hex: '#C8B194' },
+            { name: 'Carolina Blue', hex: '#7BA4DB' },
+            { name: 'Light Pink',    hex: '#F4C2C2' },
+            { name: 'Mint Green',    hex: '#A3D9B1' },
+            { name: 'Dark Grey',     hex: '#3F3F3F' },
+          ],
+        },
+        'Youth S–L': {
+          price: 25,
+          sizes: ['YS', 'YM', 'YL'],
+          colors: [
+            { name: 'Dark Grey',     hex: '#3F3F3F' },
+            { name: 'Light Pink',    hex: '#F4C2C2' },
+            { name: 'Carolina Blue', hex: '#7BA4DB' },
+          ],
+        },
+        'Toddler 2T–5T': {
+          price: 40,
+          sizes: ['2T', '3T', '4T', '5T'],
+          colors: [
+            { name: 'Navy Blue',  hex: '#0A1F44' },
+            { name: 'Light Pink', hex: '#F4C2C2' },
+          ],
+        },
+      },
     },
     joggers: {
       id: 'joggers',
@@ -1206,25 +1248,29 @@
   // ==================== STATE ====================
   const cart = [];
   let currentProduct = null;
-  let currentSize = 'M';
+  let currentTier = null;               // tier name string, e.g. 'Adult S–XL'
+  let currentSize = null;
   let checkoutMode = 'cart';            // 'cart' | 'donate'
   const donateState = { amount: 100, frequency: 'one-time', note: '' };
 
   // ==================== CART ====================
-  function addToBag(productId, size) {
+  function addToBag(productId, tier, size) {
     const p = PRODUCTS[productId];
-    const key = productId + '-' + size + '-' + p.color;
+    const tierObj = p.tiers && tier ? p.tiers[tier] : null;
+    const price = tierObj ? tierObj.price : (p.price || 0);
+    const key = productId + '|' + (tier || 'base') + '|' + size + '|' + p.color;
     const existing = cart.find(i => i.key === key);
     if (existing) existing.qty++;
     else cart.push({
-      key, id: productId, name: p.name, price: p.price, give: p.give,
-      color: p.color, size, qty: 1, image: p.images[0].src
+      key, id: productId, name: p.name, price, give: price,
+      tier, color: p.color, size, qty: 1, image: p.images[0].src
     });
     renderCart();
     bumpCart();
   }
   function addCurrentToBag() {
-    addToBag(currentProduct.id, currentSize);
+    if (!currentSize) return;
+    addToBag(currentProduct.id, currentTier, currentSize);
     closePDP();
     openCart();
   }
@@ -1270,7 +1316,7 @@
         <div class="li-body">
           <div class="li-top">
             <div class="name">${item.name}</div>
-            <div class="opts">${item.color} · ${item.size}</div>
+            <div class="opts">${item.tier ? item.tier + ' · ' : ''}${item.color} · ${item.size}</div>
             <div class="li-give">♡ $${item.give * item.qty} to the cause</div>
           </div>
           <div class="li-bot">
@@ -1307,23 +1353,60 @@
   }
   function openPDP(id) {
     currentProduct = PRODUCTS[id];
-    currentSize = 'M';
-    // populate
+    // populate shared fields
     document.getElementById('pdpTitle').textContent = currentProduct.name;
     document.getElementById('pdpCategory').textContent = currentProduct.category;
-    document.getElementById('pdpPrice').textContent = '$' + currentProduct.price;
     document.getElementById('pdpGive').innerHTML = `♡ 100% of proceeds support ${BRAND.causeName}`;
     document.getElementById('pdpDesc').textContent = currentProduct.desc;
-    document.getElementById('pdpAddPrice').textContent = '$' + currentProduct.price;
-    document.getElementById('pdpColorName').textContent = currentProduct.color;
 
     const g = document.getElementById('pdpGallery');
     g.innerHTML = currentProduct.images.map(i =>
       `<img src="${i.src}" alt="" class="${i.wide ? 'wide' : ''}" />`
     ).join('');
 
+    // render tier pills, then kick off color/size render for the first tier
+    const tierNames = Object.keys(currentProduct.tiers || {});
+    const tierEl = document.getElementById('pdpTiers');
+    tierEl.innerHTML = tierNames.map(n =>
+      `<div class="tier-pill" data-tier="${n}" onclick="setTier('${n}')">${n}</div>`
+    ).join('');
+    if (tierNames.length) setTier(tierNames[0]);
+
     document.getElementById('pdp').classList.add('open');
     html.classList.add('lock');
+  }
+
+  function setTier(tierName) {
+    if (!currentProduct || !currentProduct.tiers) return;
+    const tier = currentProduct.tiers[tierName];
+    if (!tier) return;
+    currentTier = tierName;
+    document.getElementById('pdpTierName').textContent = tierName;
+    document.getElementById('pdpPrice').textContent = '$' + tier.price;
+    document.getElementById('pdpAddPrice').textContent = '$' + tier.price;
+    document.querySelectorAll('#pdpTiers .tier-pill').forEach(el => {
+      el.classList.toggle('active', el.getAttribute('data-tier') === tierName);
+    });
+    renderColors(tier.colors);
+    renderSizes(tier.sizes);
+  }
+
+  function renderColors(colors) {
+    const el = document.getElementById('pdpSwatches');
+    el.innerHTML = colors.map((c, i) =>
+      `<div class="sw-big ${i === 0 ? 'active' : ''}" style="background: ${c.hex};" onclick="setColor(this, '${c.name}')" title="${c.name}"></div>`
+    ).join('');
+    currentProduct.color = colors[0].name;
+    document.getElementById('pdpColorName').textContent = colors[0].name;
+  }
+
+  function renderSizes(sizes) {
+    const el = document.getElementById('pdpSizes');
+    const defaultIdx = Math.min(1, sizes.length - 1); // 2nd size by default (typically M / 3T / YM)
+    el.innerHTML = sizes.map((s, i) =>
+      `<div class="size-pill ${i === defaultIdx ? 'active' : ''}">${s}</div>`
+    ).join('');
+    currentSize = sizes[defaultIdx];
   }
   function closePDP() {
     document.getElementById('pdp').classList.remove('open');
@@ -1335,8 +1418,8 @@
     await startStripeCheckout({
       mode: 'payment',
       items: cart.map(i => ({
-        name: `${i.name} — ${i.color} / ${i.size}`,
-        sku: `${i.id.toUpperCase()}-${i.color.toUpperCase()}-${i.size}`,
+        name: `${i.name}${i.tier ? ' — ' + i.tier : ''} · ${i.color} · ${i.size}`,
+        sku: `${i.id.toUpperCase()}-${(i.tier || 'BASE').replace(/[^A-Z0-9]+/gi, '')}-${i.color.replace(/[^A-Z0-9]+/gi, '').toUpperCase()}-${i.size}`,
         unit_amount: i.price * 100, // cents
         quantity: i.qty,
         image: window.location.origin + '/' + i.image,
