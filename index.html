@@ -237,6 +237,12 @@
   .story-body .eyebrow { color: var(--muted); margin-bottom: 18px; }
   .story-body h3 { font-size: clamp(32px, 3.4vw, 48px); line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 24px; }
   .story-body p { color: var(--muted); font-size: 16px; max-width: 520px; margin-bottom: 18px; }
+  .story-body .story-tagline {
+    color: var(--ink); font-weight: 700; font-size: clamp(20px, 2.2vw, 26px);
+    line-height: 1.25; letter-spacing: -0.015em;
+    padding: 22px 0; margin: 34px 0 26px;
+    border-top: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  }
 
   /* ===== CAUSE / GIVE-BACK ===== */
   .cause {
@@ -730,8 +736,6 @@
 
 <!-- ANNOUNCEMENT BAR -->
 <div class="announce copy-slot" data-slot="announcement">
-  Free shipping over $100
-  <span class="dot">•</span>
   <span class="give">100% of proceeds support our cause</span>
 </div>
 
@@ -896,7 +900,8 @@
     <p class="copy-slot" data-slot="story paragraph 2">That foundation led us to create this clothing line. What started as a shared identity grew into a brand built for those who compete in all arenas of life—sports, academics, faith, entrepreneurial spirit and personal growth. This is not just for athletes; it is for anyone committed to pushing their limits and striving for excellence. Really more about being better than the day before.</p>
     <p class="copy-slot" data-slot="story paragraph 3">Our values are rooted in faith. As Muslims, we believe competition should be guided by purpose, integrity, and service to others. At the same time, this brand is for everyone—anyone who believes in discipline, accountability, and becoming better than they were yesterday.</p>
     <p class="copy-slot" data-slot="story paragraph 4">For our first year, all proceeds will go toward the <strong>Paani Project</strong>, helping create water wells in underserved communities around the world. Access to clean water is something we often take for granted. Supporting those without it is a responsibility we take seriously, and a reflection of the values we stand for.</p>
-    <p class="copy-slot" data-slot="story paragraph 5">This brand represents more than clothing. It represents a mindset. <em>Compete with purpose. Give with intention.</em></p>
+    <p class="copy-slot" data-slot="story paragraph 5">This brand represents more than clothing. It represents a mindset.</p>
+    <p class="story-tagline copy-slot" data-slot="story tagline">Compete with purpose. Give with intention.</p>
     <p class="copy-slot" data-slot="story paragraph 6">We intentionally made our line cost-effective so it's affordable for all. Water should not be a privilege. Everyone should have access. All proceeds will be donated to the Paani Project. Thank you for your support!</p>
     <p style="margin-top: 20px; color: var(--ink); font-style: italic; max-width: 520px;">Regards,<br>Noah Siddiqi &amp; Zach Siddiqi</p>
     <div style="margin-top: 28px;">
@@ -917,36 +922,8 @@
     <div class="stats" style="margin-top: 48px;">
       <div class="stat"><div class="num">$0</div><div class="lbl">Donated to date*</div></div>
       <div class="stat"><div class="num">0</div><div class="lbl">Families supported*</div></div>
-      <div class="stat"><div class="num">Q1 26</div><div class="lbl">First receipt drop</div></div>
     </div>
     <p style="margin-top: 24px; font-size: 11px; color: var(--muted-2);">*Live counters update after launch — this section will become the single source of truth for the give-back.</p>
-  </div>
-</section>
-
-<!-- DONATE STRIP -->
-<section class="donate-strip" id="donate-section">
-  <div class="container donate-strip-inner">
-    <div>
-      <div class="eyebrow mono-caps">Give Directly</div>
-      <h2 class="serif copy-slot" data-slot="donate headline">Give directly — <em>skip the shirt.</em></h2>
-      <p class="lede copy-slot" data-slot="donate subhead">Prefer to support the cause without picking out a piece? 100% of your gift goes straight to the work.</p>
-    </div>
-    <div class="cta-box">
-      <h4>Choose an amount</h4>
-      <div class="quick-amounts" id="quickAmounts">
-        <button class="amt-chip" data-amt="25">$25</button>
-        <button class="amt-chip" data-amt="50">$50</button>
-        <button class="amt-chip active" data-amt="100">$100</button>
-        <button class="amt-chip" data-amt="250">$250</button>
-      </div>
-      <div class="custom-line">
-        <div class="dollar-in"><span class="$">$</span><input id="stripAmt" type="number" placeholder="Other amount" /></div>
-      </div>
-      <button class="btn-primary" onclick="openDonate()">
-        Continue → <span id="stripAmtDisplay" style="margin-left:4px;">$100</span>
-      </button>
-      <div class="foot-note">100% of your gift goes to the cause · Secure via Stripe</div>
-    </div>
   </div>
 </section>
 
@@ -973,19 +950,6 @@
     <div class="d">Heavyweight cotton fleece</div>
   </div>
 </div>
-
-<!-- NEWSLETTER -->
-<section class="newsletter">
-  <div class="container">
-    <h3 class="serif copy-slot" data-slot="newsletter headline">First access to new <em>drops.</em></h3>
-    <p class="copy-slot" data-slot="newsletter subhead">Drops are small, rare, and often sell through. Join the list to hear first.</p>
-    <form name="newsletter" method="POST" onsubmit="handleNewsletter(event, this)">
-      <p class="hidden" style="display:none;" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
-      <input type="email" name="email" placeholder="your@email.com" required />
-      <button type="submit">Join →</button>
-    </form>
-  </div>
-</section>
 
 <!-- FOOTER -->
 <footer>
@@ -1508,10 +1472,6 @@
     // Sync display
     const freqLabel = donateState.frequency === 'monthly' ? '/mo' : '';
     document.getElementById('donateAmtDisplay').textContent = '$' + donateState.amount + freqLabel;
-    document.getElementById('stripAmtDisplay').textContent = '$' + donateState.amount;
-    document.querySelectorAll('#quickAmounts .amt-chip').forEach(c => {
-      c.classList.toggle('active', Number(c.dataset.amt) === donateState.amount);
-    });
   }
   function setDonateAmount(amt) {
     donateState.amount = Number(amt);
