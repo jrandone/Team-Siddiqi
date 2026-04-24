@@ -216,6 +216,13 @@
   .card-give { padding: 6px 4px 0; font-size: 11px; color: var(--tan-deep); letter-spacing: 0.06em; }
   .card-swatches { display: flex; gap: 6px; padding: 10px 4px 0; }
   .swatch { width: 14px; height: 14px; border-radius: 999px; border: 1px solid var(--line); }
+  .card-shop-btn {
+    margin-top: 18px; width: 100%; padding: 16px;
+    background: var(--ink); color: var(--cream);
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;
+    transition: background .2s var(--ease);
+  }
+  .card-shop-btn:hover { background: #2a2622; }
 
   /* ===== COMING SOON ===== */
   .coming-soon-head { margin-top: 80px; margin-bottom: 28px; padding-top: 40px; border-top: 1px solid var(--line); }
@@ -821,7 +828,7 @@
       <div class="meta copy-slot" data-slot="collection intro">Made to be lived in. Starting with one piece — more to come.</div>
     </div>
 
-    <div class="grid-products">
+    <div class="grid-products" style="grid-template-columns: min(440px, 100%); justify-content: center;">
       <!-- Hoodie Card -->
       <div class="card" onclick="openPDP('hoodie')">
         <div class="card-media">
@@ -845,6 +852,7 @@
           <span class="swatch" style="background: #0A1F44;" title="Navy Blue"></span>
         </div>
         <div class="card-give">100% of proceeds support the cause</div>
+        <button class="card-shop-btn" type="button" onclick="event.stopPropagation(); openPDP('hoodie');">Shop Now →</button>
       </div>
     </div>
 
@@ -951,11 +959,9 @@
         <h5>Shop</h5>
         <a href="#shop">Hoodies</a>
         <a href="#shop">Joggers</a>
-        <a href="#" onclick="openDonate();return false;">Gift the cause</a>
       </div>
       <div class="foot-col">
         <h5>Help</h5>
-        <a href="pages/shipping.html">Shipping</a>
         <a href="pages/returns.html">All sales final</a>
         <a href="pages/contact.html">Contact</a>
       </div>
@@ -1049,7 +1055,7 @@
           <button class="acc-head" onclick="toggleAcc(this)">
             <span>Shipping & Policy</span><span class="plus">+</span>
           </button>
-          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">$6 flat standard US shipping · 3–5 business days. <strong>All sales final</strong> — please check size, color, and address before checkout. Damaged or wrong items will be replaced. See our <a href="pages/shipping.html" style="text-decoration:underline;">shipping</a> &amp; <a href="pages/returns.html" style="text-decoration:underline;">sales</a> policy.</p></div>
+          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">$6 flat standard US shipping · 3–5 business days. <strong>All sales final</strong> — please check size, color, and address before checkout. Damaged or wrong items will be replaced. See our <a href="pages/returns.html" style="text-decoration:underline;">all-sales-final policy</a>.</p></div>
         </div>
         <div class="acc-item">
           <button class="acc-head" onclick="toggleAcc(this)">

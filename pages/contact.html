@@ -39,20 +39,7 @@
 <main class="page">
   <div class="eyebrow">Get in touch</div>
   <h1 class="serif">Contact</h1>
-  <p class="lede">Order questions, collaboration, press, or feedback on the cause — reach us here. We try to reply within one business day.</p>
-
-  <div class="contact-grid">
-    <div class="contact-block">
-      <h3>Orders</h3>
-      <p><a href="mailto:orders@teamsiddiqi.com">orders@teamsiddiqi.com</a></p>
-      <p style="margin-top:8px;">Order status, shipping, damaged or wrong items.</p>
-    </div>
-    <div class="contact-block">
-      <h3>Everything else</h3>
-      <p><a href="mailto:hello@teamsiddiqi.com">hello@teamsiddiqi.com</a></p>
-      <p style="margin-top:8px;">Press, partnerships, the cause.</p>
-    </div>
-  </div>
+  <p class="lede">Order questions, collaboration, or feedback on the cause — drop us a note below. We try to reply within one business day.</p>
 
   <form class="contact" id="contactForm" name="contact" method="POST" onsubmit="return handleContact(event, this)">
     <p class="hidden" style="display:none;" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
@@ -121,7 +108,7 @@
       console.error('[contact]', err);
       btn.disabled = false;
       btn.textContent = original;
-      status.textContent = 'Could not send — please email us directly at hello@teamsiddiqi.com.';
+      status.textContent = 'Could not send — please try again in a moment.';
     }
     return false;
   }
@@ -131,7 +118,6 @@
   © 2026 Team Siddiqi Enterprises ·
   <a href="/pages/privacy.html">Privacy</a> ·
   <a href="/pages/terms.html">Terms</a> ·
-  <a href="/pages/shipping.html">Shipping</a> ·
   <a href="/pages/returns.html">All sales final</a>
 </footer>
 </body>
