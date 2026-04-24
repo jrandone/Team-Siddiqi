@@ -123,6 +123,12 @@
     margin-bottom: 44px;
   }
   .hero-sub em { color: var(--ink); font-style: normal; font-weight: 500; }
+  .hero-note {
+    font-style: italic; font-size: 15px; line-height: 1.55;
+    color: var(--tan-deep); max-width: 480px;
+    margin: -10px 0 28px;
+  }
+  .hero-note strong { font-weight: 700; font-style: italic; color: var(--ink); }
   .hero-placeholder-note {
     display: inline-block; font-size: 10px; letter-spacing: 0.16em; color: var(--tan-deep);
     background: rgba(166, 137, 106, 0.08); border: 1px dashed var(--tan-deep);
@@ -266,7 +272,7 @@
 
   /* ===== VALUE ROW ===== */
   .values {
-    display: grid; grid-template-columns: repeat(4, 1fr);
+    display: grid; grid-template-columns: repeat(3, 1fr);
     border-bottom: 1px solid var(--line);
   }
   @media (max-width: 900px) { .values { grid-template-columns: repeat(2, 1fr); } }
@@ -774,6 +780,8 @@
       <span class="line">Compete.</span>
     </h1>
 
+    <p class="hero-note copy-slot" data-slot="hero bismillah note">Bismillah means in the name of Allah (or God)—said before the start of any action. You got this— with God by your side, you <strong>CAN</strong> do anything with the right mindset.</p>
+
     <p class="hero-sub copy-slot" data-slot="hero subhead">A small collection, built to last. <em>Every order gives back</em> — 100% of proceeds support our cause.</p>
 
     <div class="hero-ctas">
@@ -930,11 +938,6 @@
 <!-- VALUES -->
 <div class="values">
   <div class="value">
-    <div class="ico">◎</div>
-    <div class="t">Free shipping over $100</div>
-    <div class="d">US orders · 3–5 business days</div>
-  </div>
-  <div class="value">
     <div class="ico">↺</div>
     <div class="t">30-day returns</div>
     <div class="d">Unworn, tags on</div>
@@ -1041,14 +1044,13 @@
       </div>
 
       <div class="pdp-group">
-        <div class="lbl"><span>Size</span><a href="#" onclick="event.preventDefault()">Size guide</a></div>
+        <div class="lbl"><span>Size</span></div>
         <div class="sizes" id="pdpSizes"></div>
       </div>
 
       <button class="pdp-add" onclick="addCurrentToBag()">Add to Bag — <span id="pdpAddPrice">$45</span></button>
 
       <div class="pdp-ship">
-        <span>◎ Free shipping over $100</span>
         <span>↺ 30-day returns</span>
       </div>
 
@@ -1063,7 +1065,7 @@
           <button class="acc-head" onclick="toggleAcc(this)">
             <span>Shipping & Returns</span><span class="plus">+</span>
           </button>
-          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">Free US shipping over $100, otherwise $6 flat. Standard 3–5 business days. 30-day returns on unworn items with tags (return shipping at your cost) — full <a href="pages/shipping.html" style="text-decoration:underline;">shipping</a> &amp; <a href="pages/returns.html" style="text-decoration:underline;">returns</a> policy.</p></div>
+          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">$6 flat standard US shipping · 3–5 business days. 30-day returns on unworn items with tags (return shipping at your cost) — full <a href="pages/shipping.html" style="text-decoration:underline;">shipping</a> &amp; <a href="pages/returns.html" style="text-decoration:underline;">returns</a> policy.</p></div>
         </div>
         <div class="acc-item">
           <button class="acc-head" onclick="toggleAcc(this)">
