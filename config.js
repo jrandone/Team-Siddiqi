@@ -11,7 +11,7 @@
 window.TSE_CONFIG = {
   // Paste your publishable key from Stripe Dashboard → Developers → API keys.
   // Starts with "pk_test_" while testing, "pk_live_" once you're ready for real orders.
-  stripePublishableKey: "pk_test_REPLACE_ME",
+  stripePublishableKey: "pk_test_51TPkjDGVZ0U84xm7jC8S2JVcuZ5U8i1A7QrDpDHdZyl4AiqwEr7KOqqxdzDPYb2foBbGXz7zAjdEmmonKPUtP3IK0039DcTe1h",
 
   brand: {
     // Shown across the site wherever we say "donation to X".
