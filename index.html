@@ -996,7 +996,7 @@
     </div>
   </div>
   <div class="drawer-foot hidden" id="drawerFoot">
-    <div class="drawer-give" id="drawerGive">Your bag includes a <strong>$0</strong> donation to the cause.</div>
+    <div class="drawer-give" id="drawerGive">All proceeds after expenses are donated to our cause.</div>
     <div class="subtotal-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
     <div class="ship-note">Shipping, taxes, and discounts calculated at checkout.</div>
     <button class="btn-primary" onclick="openCheckout()">Checkout <span class="arrow">→</span></button>
@@ -1288,7 +1288,7 @@
       </div>
     `).join('');
 
-    document.getElementById('drawerGive').innerHTML = `Your bag includes a <strong>$${give}</strong> donation to ${BRAND.causeName}.`;
+    document.getElementById('drawerGive').textContent = 'All proceeds after expenses are donated to our cause.';
   }
 
   // ==================== UI TOGGLES ====================
