@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>TSE — Team Saddiqi Enterprises</title>
+<title>TSE — Team Siddiqi Enterprises</title>
 <meta name="description" content="Eat. Sleep. Pray. Compete. Purpose-built apparel. A portion of every sale gives back." />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -206,6 +206,20 @@
   .card-give { padding: 6px 4px 0; font-size: 11px; color: var(--tan-deep); letter-spacing: 0.06em; }
   .card-swatches { display: flex; gap: 6px; padding: 10px 4px 0; }
   .swatch { width: 14px; height: 14px; border-radius: 999px; border: 1px solid var(--line); }
+
+  /* ===== COMING SOON ===== */
+  .coming-soon-head { margin-top: 80px; margin-bottom: 28px; padding-top: 40px; border-top: 1px solid var(--line); }
+  .coming-soon-head .eyebrow { color: var(--muted); }
+  .coming-soon-head h3 { font-size: clamp(28px, 3vw, 40px); line-height: 1.05; letter-spacing: -0.02em; margin-top: 4px; }
+  .coming-soon-head .meta { color: var(--muted); font-size: 13px; margin-top: 10px; max-width: 380px; }
+  .card.coming-soon { cursor: default; }
+  .card.coming-soon .card-media img { filter: grayscale(0.15); }
+  .card.coming-soon:hover .card-media img.primary { opacity: 1; }
+  .card.coming-soon .card-badge.soon {
+    background: var(--ink); color: var(--tan);
+    letter-spacing: 0.18em;
+  }
+  .card.coming-soon .card-price { color: var(--muted); font-weight: 400; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; }
 
   /* ===== EDITORIAL / STORY SECTION ===== */
   .story {
@@ -726,7 +740,7 @@
     </div>
     <a href="#" class="wordmark">
       TSE
-      <small>Team Saddiqi Enterprises</small>
+      <small>Team Siddiqi Enterprises</small>
     </a>
     <div class="nav-right">
       <button aria-label="Search">Search</button>
@@ -746,7 +760,7 @@
     <div class="caption">FW26 · Collection One</div>
   </div>
   <div class="hero-copy">
-    <div class="hero-eyebrow mono-caps copy-slot" data-slot="hero eyebrow">Team Saddiqi Enterprises · Collection One</div>
+    <div class="hero-eyebrow mono-caps copy-slot" data-slot="hero eyebrow">Team Siddiqi Enterprises · Collection One</div>
 
     <h1 class="hero-title serif copy-slot" data-slot="hero headline">
       <span class="line">Eat. Sleep. Pray.</span>
@@ -790,10 +804,10 @@
   <div class="container">
     <div class="section-head">
       <div>
-        <div class="eyebrow mono-caps">01 · The Collection</div>
+        <div class="eyebrow mono-caps">01 · Collection One</div>
         <h2 class="serif">Built for the daily grind.</h2>
       </div>
-      <div class="meta copy-slot" data-slot="collection intro">Heavyweight cotton fleece, made to be lived in. Two pieces to start — more to come.</div>
+      <div class="meta copy-slot" data-slot="collection intro">Heavyweight cotton fleece, made to be lived in. Starting with one piece — more to come.</div>
     </div>
 
     <div class="grid-products">
@@ -807,7 +821,7 @@
         </div>
         <div class="card-body">
           <div>
-            <div class="card-name">The Bismillah Hoodie</div>
+            <div class="card-name">The Bismillah Sweatshirt</div>
             <div class="card-sub">Heavyweight fleece · Sand</div>
           </div>
           <div class="card-price">$45</div>
@@ -819,28 +833,46 @@
         </div>
         <div class="card-give">100% of proceeds support the cause</div>
       </div>
+    </div>
 
-      <!-- Joggers Card -->
-      <div class="card" onclick="openPDP('joggers')">
+    <!-- COMING SOON -->
+    <div class="section-head coming-soon-head">
+      <div>
+        <div class="eyebrow mono-caps">Coming Soon</div>
+        <h3 class="serif">More of the collection, on the way.</h3>
+      </div>
+      <div class="meta">Built on the same heavyweight fleece. Drop dates and sizing coming soon.</div>
+    </div>
+
+    <div class="grid-products">
+      <!-- Joggers Coming Soon -->
+      <div class="card coming-soon">
         <div class="card-media">
-          <div class="card-badge">New</div>
-          <div class="card-badge give" style="top: auto; bottom: 14px;">100% gives back</div>
-          <img class="primary" src="assets/joggers_lifestyle.jpg" alt="Compete joggers" />
-          <img class="alt" src="assets/hoodie_front_detail.jpg" alt="Joggers detail" />
+          <div class="card-badge soon">Coming Soon</div>
+          <img class="primary" src="assets/joggers_lifestyle.jpg" alt="Compete joggers — coming soon" />
         </div>
         <div class="card-body">
           <div>
             <div class="card-name">The Compete Jogger</div>
             <div class="card-sub">Tapered fleece · Black</div>
           </div>
-          <div class="card-price">$72</div>
+          <div class="card-price">Soon</div>
         </div>
-        <div class="card-swatches">
-          <span class="swatch" style="background: #0D0D0D;" title="Black"></span>
-          <span class="swatch" style="background: #5A5449;" title="Olive"></span>
-          <span class="swatch" style="background: #C8B194;" title="Sand"></span>
+      </div>
+
+      <!-- Shorts Coming Soon -->
+      <div class="card coming-soon">
+        <div class="card-media">
+          <div class="card-badge soon">Coming Soon</div>
+          <img class="primary" src="assets/shorts_lifestyle.jpg" alt="Eat Sleep Pray Compete shorts — coming soon" />
         </div>
-        <div class="card-give">100% of proceeds support the cause</div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">The Compete Short</div>
+            <div class="card-sub">Performance knit · Black</div>
+          </div>
+          <div class="card-price">Soon</div>
+        </div>
       </div>
     </div>
   </div>
@@ -969,7 +1001,7 @@
       </div>
     </div>
     <div class="foot-bottom">
-      <div>© 2026 Team Saddiqi Enterprises</div>
+      <div>© 2026 Team Siddiqi Enterprises</div>
       <div><a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a> · <a href="pages/returns.html">Returns</a></div>
     </div>
   </div>
