@@ -16,7 +16,6 @@
 const Stripe = require('stripe');
 
 const ALLOWED_COUNTRIES = ['US', 'CA']; // expand later if you ship wider
-const FREE_SHIPPING_THRESHOLD_CENTS = 7500; // $75
 
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
@@ -87,11 +86,6 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Cart is empty.' });
     }
 
-    const subtotalCents = items.reduce(
-      (sum, i) => sum + Number(i.unit_amount) * Number(i.quantity),
-      0
-    );
-
     const line_items = items.map((i) => ({
       price_data: {
         currency: 'usd',
@@ -105,32 +99,26 @@ module.exports = async (req, res) => {
       quantity: Number(i.quantity) || 1,
     }));
 
-    const shipping_options = [];
-    if (subtotalCents >= FREE_SHIPPING_THRESHOLD_CENTS) {
-      shipping_options.push({
+    const shipping_options = [
+      {
         shipping_rate_data: {
           type: 'fixed_amount',
           fixed_amount: { amount: 0, currency: 'usd' },
-          display_name: 'Free standard shipping (3–5 business days)',
-          delivery_estimate: {
-            minimum: { unit: 'business_day', value: 3 },
-            maximum: { unit: 'business_day', value: 5 },
-          },
+          display_name: 'Pickup from Zach & Noah (no shipping)',
         },
-      });
-    } else {
-      shipping_options.push({
+      },
+      {
         shipping_rate_data: {
           type: 'fixed_amount',
-          fixed_amount: { amount: 600, currency: 'usd' },
-          display_name: 'Standard shipping (3–5 business days)',
+          fixed_amount: { amount: 800, currency: 'usd' },
+          display_name: 'Standard shipping',
           delivery_estimate: {
-            minimum: { unit: 'business_day', value: 3 },
-            maximum: { unit: 'business_day', value: 5 },
+            minimum: { unit: 'business_day', value: 7 },
+            maximum: { unit: 'business_day', value: 30 },
           },
         },
-      });
-    }
+      },
+    ];
 
     const session = await stripe.checkout.sessions.create({
       mode: 'payment',
