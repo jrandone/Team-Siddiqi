@@ -989,7 +989,6 @@
     </div>
   </div>
   <div class="drawer-foot hidden" id="drawerFoot">
-    <div class="drawer-give" id="drawerGive">All proceeds are donated to our cause.</div>
     <div class="subtotal-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
     <div class="ship-note">Shipping, taxes, and discounts calculated at checkout.</div>
     <button class="btn-primary" onclick="openCheckout()">Checkout <span class="arrow">→</span></button>
@@ -1009,10 +1008,8 @@
       <div class="pdp-price-row">
         <div class="pdp-price" id="pdpPrice">$45</div>
       </div>
-      <div class="pdp-give-inline" id="pdpGive">♡ All proceeds are donated to our cause</div>
-
       <p class="pdp-desc copy-slot" data-slot="PDP description" id="pdpDesc">
-        Relaxed fit, built to become your go-to. Every order gives back — all proceeds are donated to our cause.
+        Relaxed fit, built to become your go-to.
       </p>
 
       <div class="pdp-group">
@@ -1129,7 +1126,7 @@
         { src: 'assets/hoodie_front_detail.jpg' },
         { src: 'assets/hero_lifestyle.jpg' },
       ],
-      desc: 'Relaxed fit, built to become your go-to. Offered in Adult, Youth, and Toddler fits. Every order gives back — all proceeds are donated to our cause.',
+      desc: 'Relaxed fit, built to become your go-to. Offered in Adult, Youth, and Toddler fits.',
       tiers: {
         'Adult S–XL': {
           price: 45,
@@ -1188,7 +1185,7 @@
         { src: 'assets/hero_lifestyle.jpg' },
         { src: 'assets/hoodie_back.jpg' },
       ],
-      desc: 'Tapered fit with ribbed cuffs and deep pockets, built for the grind. Every order gives back — all proceeds are donated to our cause.'
+      desc: 'Tapered fit with ribbed cuffs and deep pockets, built for the grind.'
     }
   };
 
@@ -1280,7 +1277,6 @@
       </div>
     `).join('');
 
-    document.getElementById('drawerGive').textContent = 'All proceeds are donated to our cause.';
   }
 
   // ==================== UI TOGGLES ====================
@@ -1302,7 +1298,6 @@
     // populate shared fields
     document.getElementById('pdpTitle').textContent = currentProduct.name;
     document.getElementById('pdpCategory').textContent = currentProduct.category;
-    document.getElementById('pdpGive').innerHTML = `♡ All proceeds are donated to ${BRAND.causeName}`;
     document.getElementById('pdpDesc').textContent = currentProduct.desc;
 
     const g = document.getElementById('pdpGallery');
