@@ -1,0 +1,1500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TSE — Team Saddiqi Enterprises</title>
+<meta name="description" content="Eat. Sleep. Pray. Compete. Purpose-built apparel. A portion of every sale gives back." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="icon" href="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230D0D0D'/><text x='16' y='21' font-family='Inter,sans-serif' font-size='12' font-weight='700' fill='%23F5F0E8' text-anchor='middle' letter-spacing='1'>TSE</text></svg>" />
+<script src="https://js.stripe.com/v3/"></script>
+<style>
+  :root {
+    --cream: #F5F0E8;
+    --cream-deep: #EFE7DA;
+    --ink: #0D0D0D;
+    --ink-soft: #1A1A1A;
+    --muted: #6B6257;
+    --muted-2: #9A9285;
+    --tan: #C8B194;
+    --tan-deep: #A6896A;
+    --line: #E4DCCD;
+    --accent: #0D0D0D;
+    --success: #2F6B3A;
+    --radius: 2px;
+    --ease: cubic-bezier(.2,.7,.2,1);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--cream); color: var(--ink); font-family: 'Inter', system-ui, -apple-system, sans-serif; -webkit-font-smoothing: antialiased; font-size: 15px; line-height: 1.55; }
+  a { color: inherit; text-decoration: none; }
+  img { display: block; max-width: 100%; }
+  button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+  .serif { font-family: 'Instrument Serif', 'Times New Roman', serif; font-weight: 400; letter-spacing: -0.01em; }
+  .mono-caps { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; font-weight: 500; }
+  .container { max-width: 1360px; margin: 0 auto; padding: 0 32px; }
+  @media (max-width: 720px) { .container { padding: 0 20px; } }
+
+  /* ===== ANNOUNCEMENT BAR ===== */
+  .announce {
+    background: var(--ink);
+    color: var(--cream);
+    text-align: center;
+    padding: 10px 16px;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+  }
+  .announce .dot { opacity: 0.4; margin: 0 14px; }
+  .announce .give { color: var(--tan); }
+
+  /* ===== NAV ===== */
+  nav.top {
+    position: sticky; top: 0; z-index: 30;
+    background: rgba(245, 240, 232, 0.92);
+    backdrop-filter: saturate(1.2) blur(10px);
+    -webkit-backdrop-filter: saturate(1.2) blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-inner { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 64px; }
+  .nav-links { display: flex; gap: 28px; }
+  .nav-links a { font-size: 13px; letter-spacing: 0.04em; padding: 8px 0; position: relative; }
+  .nav-links a:hover::after { content: ''; position: absolute; left: 0; right: 0; bottom: 2px; height: 1px; background: var(--ink); }
+  .wordmark { font-size: 20px; letter-spacing: 0.24em; font-weight: 600; text-align: center; }
+  .wordmark small { display: block; font-size: 9px; letter-spacing: 0.32em; font-weight: 400; color: var(--muted); margin-top: 2px; }
+  .nav-right { display: flex; justify-content: flex-end; gap: 22px; align-items: center; }
+  .nav-right button { font-size: 13px; letter-spacing: 0.04em; }
+  .cart-btn { position: relative; }
+  .cart-count {
+    position: absolute; top: -8px; right: -12px;
+    background: var(--ink); color: var(--cream);
+    border-radius: 999px; min-width: 18px; height: 18px;
+    font-size: 10px; font-weight: 600;
+    display: flex; align-items: center; justify-content: center;
+    padding: 0 5px;
+    transition: transform .3s var(--ease);
+  }
+  .cart-count.bump { animation: bump .45s var(--ease); }
+  @keyframes bump { 0%{transform:scale(1);} 40%{transform:scale(1.4);} 100%{transform:scale(1);} }
+
+  /* ===== HERO ===== */
+  .hero {
+    display: grid;
+    grid-template-columns: 1.05fr 1fr;
+    min-height: calc(100vh - 104px);
+    border-bottom: 1px solid var(--line);
+  }
+  .hero-media {
+    background: #000;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-media img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    opacity: 0.98;
+  }
+  .hero-media::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.45) 100%);
+    pointer-events: none;
+  }
+  .hero-media .caption {
+    position: absolute; left: 32px; bottom: 24px;
+    color: rgba(245,240,232,0.75);
+    font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase;
+  }
+  .hero-copy {
+    padding: 72px 64px; display: flex; flex-direction: column; justify-content: center;
+    background: var(--cream);
+  }
+  .hero-eyebrow { color: var(--muted); margin-bottom: 28px; }
+  .hero-title {
+    font-size: clamp(48px, 6.4vw, 88px);
+    line-height: 0.98; letter-spacing: -0.02em;
+    margin-bottom: 28px;
+  }
+  .hero-title .line { display: block; }
+  .hero-title .line:nth-child(2) { font-style: italic; color: var(--tan-deep); }
+  .hero-sub {
+    font-size: 17px; color: var(--muted); max-width: 480px;
+    margin-bottom: 44px;
+  }
+  .hero-sub em { color: var(--ink); font-style: normal; font-weight: 500; }
+  .hero-placeholder-note {
+    display: inline-block; font-size: 10px; letter-spacing: 0.16em; color: var(--tan-deep);
+    background: rgba(166, 137, 106, 0.08); border: 1px dashed var(--tan-deep);
+    padding: 4px 10px; border-radius: 2px; text-transform: uppercase; margin-bottom: 20px;
+  }
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 12px;
+    background: var(--ink); color: var(--cream);
+    padding: 18px 32px; font-size: 13px; letter-spacing: 0.16em;
+    text-transform: uppercase; font-weight: 500;
+    transition: background .25s var(--ease), transform .25s var(--ease);
+    align-self: flex-start;
+  }
+  .btn-primary:hover { background: #2a2622; transform: translateY(-1px); }
+  .btn-primary .arrow { transition: transform .25s var(--ease); }
+  .btn-primary:hover .arrow { transform: translateX(4px); }
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 10px;
+    border: 1px solid var(--ink); padding: 16px 28px;
+    font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;
+    transition: background .2s var(--ease), color .2s var(--ease);
+  }
+  .btn-secondary:hover { background: var(--ink); color: var(--cream); }
+  .hero-ctas { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+  .hero-metric {
+    margin-top: 56px;
+    display: flex; gap: 40px; border-top: 1px solid var(--line); padding-top: 24px;
+  }
+  .hero-metric .m { }
+  .hero-metric .m .num { font-size: 28px; font-family: 'Instrument Serif', serif; line-height: 1; }
+  .hero-metric .m .lbl { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+
+  /* ===== MISSION STRIP ===== */
+  .mission-strip {
+    background: var(--ink); color: var(--cream);
+    padding: 22px 32px; text-align: center;
+    font-size: 13px; letter-spacing: 0.06em;
+  }
+  .mission-strip strong { color: var(--tan); font-weight: 600; }
+
+  /* ===== SECTION HEADINGS ===== */
+  .section { padding: 120px 0; border-bottom: 1px solid var(--line); }
+  .section-head { display: flex; align-items: end; justify-content: space-between; margin-bottom: 56px; gap: 32px; flex-wrap: wrap; }
+  .section-head .eyebrow { color: var(--muted); margin-bottom: 8px; }
+  .section-head h2 { font-size: clamp(36px, 4vw, 56px); line-height: 1; letter-spacing: -0.02em; }
+  .section-head .meta { color: var(--muted); font-size: 13px; max-width: 380px; }
+
+  /* ===== PRODUCT GRID ===== */
+  .grid-products {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: 40px 32px;
+  }
+  @media (max-width: 720px) { .grid-products { grid-template-columns: 1fr; } }
+  .card {
+    cursor: pointer; group: card;
+  }
+  .card-media {
+    background: var(--cream-deep);
+    aspect-ratio: 4/5;
+    overflow: hidden; position: relative;
+  }
+  .card-media img {
+    width: 100%; height: 100%; object-fit: cover; object-position: center;
+    transition: transform .8s var(--ease), opacity .4s var(--ease);
+  }
+  .card-media img.alt {
+    position: absolute; inset: 0; opacity: 0;
+  }
+  .card:hover .card-media img.primary { opacity: 0; }
+  .card:hover .card-media img.alt { opacity: 1; transform: scale(1.02); }
+  .card-badge {
+    position: absolute; top: 14px; left: 14px;
+    background: rgba(245, 240, 232, 0.95);
+    padding: 6px 10px; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; font-weight: 500;
+  }
+  .card-badge.give { background: var(--ink); color: var(--tan); }
+  .card-body { padding: 18px 4px 0; display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .card-name { font-size: 15px; font-weight: 500; }
+  .card-sub { color: var(--muted); font-size: 12px; margin-top: 4px; letter-spacing: 0.02em; }
+  .card-price { font-size: 15px; font-weight: 500; }
+  .card-give { padding: 6px 4px 0; font-size: 11px; color: var(--tan-deep); letter-spacing: 0.06em; }
+  .card-swatches { display: flex; gap: 6px; padding: 10px 4px 0; }
+  .swatch { width: 14px; height: 14px; border-radius: 999px; border: 1px solid var(--line); }
+
+  /* ===== EDITORIAL / STORY SECTION ===== */
+  .story {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 0;
+    background: var(--cream-deep);
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 900px) { .story { grid-template-columns: 1fr; } }
+  .story-media img { width: 100%; height: 100%; object-fit: cover; min-height: 520px; }
+  .story-body {
+    padding: 96px 72px;
+    display: flex; flex-direction: column; justify-content: center;
+  }
+  .story-body .eyebrow { color: var(--muted); margin-bottom: 18px; }
+  .story-body h3 { font-size: clamp(32px, 3.4vw, 48px); line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 24px; }
+  .story-body p { color: var(--muted); font-size: 16px; max-width: 520px; margin-bottom: 18px; }
+
+  /* ===== CAUSE / GIVE-BACK ===== */
+  .cause {
+    padding: 120px 0;
+    text-align: center;
+    border-bottom: 1px solid var(--line);
+  }
+  .cause .big {
+    font-size: clamp(64px, 9vw, 140px); line-height: 0.9; letter-spacing: -0.03em;
+  }
+  .cause .big em { color: var(--tan-deep); }
+  .cause p { max-width: 620px; margin: 32px auto 0; color: var(--muted); font-size: 16px; }
+  .cause .stats {
+    margin-top: 72px; display: grid; grid-template-columns: repeat(3, 1fr); max-width: 780px; margin-left: auto; margin-right: auto;
+    border-top: 1px solid var(--line);
+  }
+  .cause .stat { padding: 28px 16px; border-right: 1px solid var(--line); }
+  .cause .stat:last-child { border-right: none; }
+  .cause .stat .num { font-size: 32px; font-family: 'Instrument Serif', serif; }
+  .cause .stat .lbl { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-top: 6px; }
+
+  /* ===== VALUE ROW ===== */
+  .values {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-bottom: 1px solid var(--line);
+  }
+  @media (max-width: 900px) { .values { grid-template-columns: repeat(2, 1fr); } }
+  .value {
+    padding: 44px 28px; text-align: center;
+    border-right: 1px solid var(--line);
+  }
+  .value:last-child { border-right: none; }
+  .value .ico { font-size: 22px; margin-bottom: 14px; }
+  .value .t { font-size: 13px; font-weight: 600; letter-spacing: 0.04em; }
+  .value .d { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+  /* ===== NEWSLETTER ===== */
+  .newsletter {
+    padding: 120px 0; text-align: center;
+    background: var(--ink); color: var(--cream);
+  }
+  .newsletter h3 { font-size: clamp(36px, 4vw, 56px); line-height: 1.05; letter-spacing: -0.02em; max-width: 800px; margin: 0 auto 24px; }
+  .newsletter h3 em { color: var(--tan); font-family: 'Instrument Serif', serif; font-style: italic; }
+  .newsletter p { color: rgba(245, 240, 232, 0.6); max-width: 520px; margin: 0 auto 36px; font-size: 15px; }
+  .newsletter form { max-width: 460px; margin: 0 auto; display: flex; border-bottom: 1px solid rgba(245,240,232,0.2); }
+  .newsletter input {
+    flex: 1; background: none; border: none; outline: none;
+    padding: 16px 4px; color: var(--cream); font-family: inherit; font-size: 15px;
+  }
+  .newsletter input::placeholder { color: rgba(245, 240, 232, 0.4); }
+  .newsletter button[type=submit] {
+    padding: 16px 0; color: var(--cream); font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--ink); color: rgba(245, 240, 232, 0.75);
+    padding: 80px 0 32px; border-top: 1px solid #1a1a1a;
+  }
+  .foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 56px; border-bottom: 1px solid rgba(245,240,232,0.08); }
+  @media (max-width: 720px) { .foot-grid { grid-template-columns: 1fr 1fr; } }
+  .foot-word { font-size: 22px; letter-spacing: 0.22em; color: var(--cream); font-weight: 600; margin-bottom: 12px; }
+  .foot-tag { font-size: 13px; color: rgba(245,240,232,0.55); max-width: 320px; }
+  .foot-col h5 { color: var(--cream); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 16px; font-weight: 500; }
+  .foot-col a { display: block; padding: 6px 0; font-size: 13px; color: rgba(245,240,232,0.6); }
+  .foot-col a:hover { color: var(--cream); }
+  .foot-bottom { padding-top: 28px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 16px; font-size: 11px; letter-spacing: 0.08em; color: rgba(245,240,232,0.4); }
+
+  /* ===== CART DRAWER ===== */
+  .overlay {
+    position: fixed; inset: 0; background: rgba(13, 13, 13, 0.55);
+    opacity: 0; pointer-events: none;
+    transition: opacity .35s var(--ease);
+    z-index: 60;
+  }
+  .overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: min(460px, 100%);
+    background: var(--cream); z-index: 70;
+    transform: translateX(100%);
+    transition: transform .4s var(--ease);
+    display: flex; flex-direction: column;
+    box-shadow: -20px 0 60px rgba(0,0,0,0.12);
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head { padding: 22px 28px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); }
+  .drawer-head h4 { font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; }
+  .x-btn { font-size: 18px; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; }
+  .drawer-body { flex: 1; overflow-y: auto; padding: 24px 28px; }
+  .empty-state { text-align: center; padding: 80px 20px; color: var(--muted); }
+  .empty-state .ico { font-size: 40px; margin-bottom: 16px; opacity: 0.3; }
+  .empty-state h5 { font-size: 16px; color: var(--ink); margin-bottom: 8px; }
+  .line-item { display: grid; grid-template-columns: 80px 1fr; gap: 16px; padding: 20px 0; border-bottom: 1px solid var(--line); }
+  .line-item img { width: 80px; height: 100px; object-fit: cover; background: var(--cream-deep); }
+  .li-body { display: flex; flex-direction: column; justify-content: space-between; }
+  .li-top .name { font-size: 14px; font-weight: 500; }
+  .li-top .opts { font-size: 12px; color: var(--muted); margin-top: 4px; }
+  .li-give { font-size: 11px; color: var(--tan-deep); margin-top: 4px; letter-spacing: 0.05em; }
+  .li-bot { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; }
+  .qty { display: flex; align-items: center; border: 1px solid var(--line); font-size: 12px; }
+  .qty button { padding: 4px 10px; }
+  .qty span { padding: 0 10px; min-width: 24px; text-align: center; }
+  .li-remove { font-size: 11px; color: var(--muted); text-decoration: underline; }
+  .li-price { font-weight: 500; font-size: 14px; }
+  .drawer-foot { padding: 24px 28px; border-top: 1px solid var(--line); background: var(--cream); }
+  .subtotal-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
+  .subtotal-row.total { font-size: 16px; font-weight: 600; padding-top: 10px; border-top: 1px solid var(--line); margin-top: 10px; }
+  .ship-note { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+  .drawer-foot .btn-primary { width: 100%; justify-content: center; padding: 16px; }
+  .drawer-give {
+    background: rgba(166, 137, 106, 0.1); color: var(--tan-deep);
+    padding: 10px 14px; font-size: 12px; text-align: center;
+    margin-bottom: 16px; letter-spacing: 0.04em;
+  }
+
+  /* ===== PDP (Product Detail Page) ===== */
+  .pdp-view {
+    position: fixed; inset: 0; background: var(--cream);
+    z-index: 80; overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform .5s var(--ease);
+  }
+  .pdp-view.open { transform: translateY(0); }
+  .pdp-close {
+    position: fixed; top: 20px; right: 24px; z-index: 90;
+    font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    background: var(--cream); padding: 10px 18px; border: 1px solid var(--line);
+  }
+  .pdp-grid { display: grid; grid-template-columns: 1.2fr 1fr; min-height: 100vh; }
+  @media (max-width: 900px) { .pdp-grid { grid-template-columns: 1fr; } }
+  .pdp-gallery { background: var(--cream-deep); padding: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-content: start; }
+  .pdp-gallery img { aspect-ratio: 4/5; object-fit: cover; background: #fff; width: 100%; }
+  .pdp-gallery img.wide { grid-column: span 2; aspect-ratio: 16/10; }
+  .pdp-side { padding: 72px 72px 64px; position: sticky; top: 0; align-self: start; max-height: 100vh; overflow-y: auto; }
+  @media (max-width: 900px) { .pdp-side { padding: 40px 24px; position: static; } }
+  .pdp-bread { color: var(--muted); font-size: 12px; letter-spacing: 0.06em; margin-bottom: 18px; }
+  .pdp-bread a { text-decoration: underline; text-decoration-color: var(--line); }
+  .pdp-title { font-size: 34px; line-height: 1.05; letter-spacing: -0.01em; margin-bottom: 8px; }
+  .pdp-price-row { display: flex; gap: 16px; align-items: baseline; margin-bottom: 6px; }
+  .pdp-price { font-size: 20px; font-weight: 500; }
+  .pdp-give-inline { font-size: 12px; color: var(--tan-deep); margin-bottom: 28px; letter-spacing: 0.04em; }
+  .pdp-desc { font-size: 14px; color: var(--muted); margin-bottom: 32px; max-width: 460px; }
+  .pdp-group { margin-bottom: 24px; }
+  .pdp-group .lbl { display: flex; justify-content: space-between; font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 12px; }
+  .pdp-group .lbl a { color: var(--muted); text-decoration: underline; }
+  .swatches { display: flex; gap: 10px; }
+  .sw-big { width: 32px; height: 32px; border-radius: 999px; border: 1px solid var(--line); cursor: pointer; position: relative; }
+  .sw-big.active { outline: 1px solid var(--ink); outline-offset: 3px; }
+  .sizes { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .size-pill {
+    border: 1px solid var(--line); padding: 12px 4px; font-size: 13px; text-align: center;
+    cursor: pointer; background: var(--cream);
+    transition: background .15s var(--ease), border-color .15s var(--ease);
+  }
+  .size-pill:hover { border-color: var(--ink); }
+  .size-pill.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .size-pill.oos { color: var(--muted-2); text-decoration: line-through; cursor: not-allowed; background: transparent; }
+  .pdp-add { width: 100%; padding: 20px; background: var(--ink); color: var(--cream); font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500; margin-bottom: 10px; transition: background .2s var(--ease); }
+  .pdp-add:hover { background: #2a2622; }
+  .pdp-express { width: 100%; padding: 16px; background: #5A31F4; color: #fff; font-size: 13px; font-weight: 600; letter-spacing: 0.02em; margin-bottom: 20px; display: flex; align-items: center; justify-content: center; gap: 8px; }
+  .pdp-express small { font-weight: 400; opacity: 0.9; }
+  .pdp-ship {
+    font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); padding-top: 20px; margin-bottom: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px;
+  }
+  .pdp-accordion { border-top: 1px solid var(--line); }
+  .acc-item { border-bottom: 1px solid var(--line); }
+  .acc-head { width: 100%; padding: 16px 0; display: flex; justify-content: space-between; align-items: center; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase; font-weight: 500; }
+  .acc-head .plus { font-size: 16px; transition: transform .2s var(--ease); }
+  .acc-item.open .acc-head .plus { transform: rotate(45deg); }
+  .acc-body { max-height: 0; overflow: hidden; transition: max-height .35s var(--ease); }
+  .acc-item.open .acc-body { max-height: 400px; }
+  .acc-body p { padding: 0 0 20px; color: var(--muted); font-size: 13px; }
+
+  /* ===== CHECKOUT ===== */
+  .checkout {
+    position: fixed; inset: 0; z-index: 100;
+    background: #fff;
+    overflow-y: auto;
+    transform: translateY(100%);
+    transition: transform .45s var(--ease);
+  }
+  .checkout.open { transform: translateY(0); }
+  .co-grid { display: grid; grid-template-columns: 1.1fr 1fr; min-height: 100vh; max-width: 1320px; margin: 0 auto; }
+  @media (max-width: 900px) { .co-grid { grid-template-columns: 1fr; } }
+  .co-main { padding: 48px 64px; }
+  @media (max-width: 900px) { .co-main { padding: 32px 24px; } }
+  .co-back { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; display: inline-block; }
+  .co-word { font-size: 18px; letter-spacing: 0.22em; font-weight: 600; margin-bottom: 36px; }
+  .co-express { display: flex; gap: 10px; margin-bottom: 8px; }
+  .co-express button {
+    flex: 1; padding: 14px; font-weight: 600; font-size: 14px;
+    border-radius: 4px;
+  }
+  .co-apple { background: #000; color: #fff; }
+  .co-gpay { background: #000; color: #fff; }
+  .co-shop { background: #5A31F4; color: #fff; }
+  .co-link {
+    width: 100%; padding: 14px; margin-bottom: 10px;
+    background: #00D66F; color: #000; font-weight: 600; font-size: 14px;
+    border-radius: 4px; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .co-link .k { background: #000; color: #00D66F; padding: 2px 6px; border-radius: 2px; font-size: 12px; font-weight: 700; }
+  .divider { display: flex; align-items: center; gap: 14px; margin: 24px 0 20px; color: var(--muted); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .divider::before, .divider::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .co-section h4 { font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 16px; font-weight: 600; }
+  .field { margin-bottom: 12px; }
+  .field label { display: block; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 6px; }
+  .field input, .field select {
+    width: 100%; padding: 14px; border: 1px solid #dcd6ca; background: #fff;
+    font-family: inherit; font-size: 14px; color: var(--ink); outline: none;
+    border-radius: 4px;
+    transition: border-color .2s var(--ease), box-shadow .2s var(--ease);
+  }
+  .field input:focus, .field select:focus { border-color: var(--ink); box-shadow: 0 0 0 3px rgba(13,13,13,0.08); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .field-row-3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 12px; }
+  .co-section { margin-bottom: 36px; }
+
+  .card-field {
+    border: 1px solid #dcd6ca; border-radius: 4px; background: #fff;
+    padding: 14px; display: grid; grid-template-columns: 1fr 80px 80px; gap: 10px;
+    align-items: center;
+  }
+  .card-field input { border: none; padding: 0; font-size: 14px; outline: none; background: transparent; }
+  .card-field .brands { position: absolute; right: 12px; display: flex; gap: 4px; }
+  .card-wrap { position: relative; }
+  .card-brand-logos { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); display: flex; gap: 4px; pointer-events: none; }
+  .card-brand-logos span { font-size: 9px; padding: 2px 5px; background: #f4f0e8; border: 1px solid var(--line); border-radius: 2px; letter-spacing: 0.05em; color: var(--muted); font-weight: 600; }
+
+  .place-order {
+    width: 100%; padding: 20px; background: var(--ink); color: var(--cream);
+    font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;
+    margin-top: 20px; border-radius: 4px;
+    transition: background .2s var(--ease);
+  }
+  .place-order:hover { background: #2a2622; }
+  .co-footer-legal { margin-top: 18px; font-size: 11px; color: var(--muted); text-align: center; letter-spacing: 0.02em; }
+  .co-secure { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 18px; color: var(--muted); font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .co-stripe { display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 24px; color: var(--muted-2); font-size: 11px; }
+  .co-stripe .stripe-lockup { font-weight: 700; color: #5A31F4; letter-spacing: -0.01em; }
+
+  .co-side {
+    background: var(--cream); border-left: 1px solid var(--line);
+    padding: 48px 56px;
+  }
+  @media (max-width: 900px) { .co-side { padding: 32px 24px; border-left: none; border-top: 1px solid var(--line); } }
+  .co-side h4 { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 20px; color: var(--muted); }
+  .co-li { display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; margin-bottom: 22px; align-items: start; }
+  .co-li-img { width: 64px; height: 80px; object-fit: cover; background: var(--cream-deep); position: relative; }
+  .co-li-qty { position: absolute; top: -6px; right: -6px; width: 22px; height: 22px; border-radius: 999px; background: var(--ink); color: var(--cream); font-size: 11px; font-weight: 600; display: flex; align-items: center; justify-content: center; }
+  .co-li-name { font-size: 13px; font-weight: 500; }
+  .co-li-opts { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .co-li-price { font-size: 13px; font-weight: 500; }
+  .discount-row { display: flex; gap: 8px; margin: 20px 0; }
+  .discount-row input { flex: 1; padding: 12px; border: 1px solid var(--line); background: #fff; font-family: inherit; font-size: 13px; border-radius: 4px; }
+  .discount-row button { padding: 12px 18px; background: var(--cream-deep); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 4px; }
+  .co-summary { border-top: 1px solid var(--line); padding-top: 20px; }
+  .co-summary .row { display: flex; justify-content: space-between; padding: 6px 0; font-size: 13px; }
+  .co-summary .row.give { color: var(--tan-deep); }
+  .co-summary .row.total { font-size: 18px; font-weight: 600; padding: 14px 0 0; border-top: 1px solid var(--line); margin-top: 12px; }
+  .co-summary .row.total .sub { font-size: 11px; color: var(--muted); font-weight: 400; }
+  .co-donation-card {
+    background: rgba(166,137,106,0.08); border: 1px solid rgba(166,137,106,0.25);
+    padding: 14px 16px; font-size: 12px; color: var(--tan-deep); margin-top: 20px;
+    display: flex; gap: 10px; align-items: start;
+    border-radius: 4px;
+  }
+  .co-donation-card .heart { font-size: 16px; }
+
+  /* Donate-mode line item */
+  .co-donate-li {
+    display: grid; grid-template-columns: 64px 1fr auto; gap: 14px; align-items: center;
+    padding: 14px; background: rgba(166,137,106,0.08); border: 1px solid rgba(166,137,106,0.22);
+    border-radius: 4px; margin-bottom: 22px;
+  }
+  .co-donate-icon {
+    width: 64px; height: 64px; border-radius: 999px;
+    background: var(--ink); color: var(--tan);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+  }
+
+  /* ===== CONFIRMATION ===== */
+  .confirm {
+    position: fixed; inset: 0; background: var(--cream); z-index: 110;
+    display: none; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .confirm.open { display: flex; animation: fadeIn .4s var(--ease); }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .confirm-inner { max-width: 520px; text-align: center; }
+  .confirm-check {
+    width: 72px; height: 72px; border-radius: 999px;
+    background: var(--ink); color: var(--cream);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 32px; font-size: 28px;
+  }
+  .confirm h2 { font-size: 48px; letter-spacing: -0.02em; margin-bottom: 16px; line-height: 1.05; }
+  .confirm p { color: var(--muted); margin-bottom: 32px; }
+  .confirm .order-num { font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 40px; }
+  .confirm-give {
+    background: rgba(166,137,106,0.1); color: var(--tan-deep);
+    padding: 16px 20px; margin: 32px 0; font-size: 13px;
+  }
+
+  /* ===== ANNOTATIONS (dev labels) ===== */
+  .copy-slot {
+    border: 1px dashed transparent;
+    padding: 0;
+    position: relative;
+    transition: all .2s var(--ease);
+  }
+  body.dev .copy-slot { border-color: rgba(166,137,106,0.45); padding: 4px; }
+  body.dev .copy-slot::before {
+    content: attr(data-slot);
+    position: absolute; top: -8px; left: 0;
+    background: var(--tan-deep); color: var(--cream);
+    font-size: 9px; padding: 2px 6px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-family: 'Inter', sans-serif; font-weight: 500;
+  }
+  .dev-toggle {
+    position: fixed; bottom: 18px; left: 18px; z-index: 200;
+    background: var(--ink); color: var(--cream);
+    padding: 10px 14px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    border-radius: 999px; box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+  }
+
+  /* ===== UTILITIES ===== */
+  .hidden { display: none !important; }
+  html.lock { overflow: hidden; }
+
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-media { min-height: 56vh; }
+    .hero-copy { padding: 48px 28px; }
+    .story-body { padding: 56px 28px; }
+    .section { padding: 72px 0; }
+    .nav-links { display: none; }
+  }
+
+  /* ===== EMPTY COPY SLOT MIN-HEIGHTS ===== */
+  .hero-sub { min-height: 3.2em; }
+  .section-head .meta { min-height: 3.5em; }
+  .story-body h3 { min-height: 1.1em; }
+  .story-body p { min-height: 3em; }
+  .cause h2.big { min-height: 0.95em; }
+  .cause p { min-height: 2.5em; }
+  .newsletter h3 { min-height: 1.1em; }
+  .newsletter p { min-height: 2em; }
+  .foot-tag { min-height: 2.4em; }
+  .pdp-desc { min-height: 3em; }
+  .acc-body p { min-height: 1.8em; }
+  .confirm p { min-height: 2.5em; }
+
+  /* ===== NAV DONATE LINK ===== */
+  .nav-donate {
+    border: 1px solid var(--ink);
+    padding: 6px 14px !important;
+    margin-left: 6px;
+    font-weight: 500;
+    transition: background .2s var(--ease), color .2s var(--ease);
+  }
+  .nav-donate:hover { background: var(--ink); color: var(--cream); }
+  .nav-donate:hover::after { display: none; }
+
+  /* ===== DONATE STRIP SECTION ===== */
+  .donate-strip {
+    background: linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+    border-bottom: 1px solid var(--line);
+    padding: 110px 0;
+  }
+  .donate-strip-inner {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 72px;
+    align-items: center;
+  }
+  @media (max-width: 900px) {
+    .donate-strip-inner { grid-template-columns: 1fr; gap: 40px; }
+    .donate-strip { padding: 72px 0; }
+  }
+  .donate-strip .eyebrow { color: var(--muted); margin-bottom: 16px; }
+  .donate-strip h2 { font-size: clamp(36px, 4.2vw, 58px); line-height: 1.02; letter-spacing: -0.02em; margin-bottom: 20px; min-height: 1.05em; }
+  .donate-strip .lede { min-height: 3em; }
+  .donate-strip .lede { color: var(--muted); max-width: 440px; font-size: 16px; }
+  .donate-strip .cta-box {
+    background: var(--cream); border: 1px solid var(--line);
+    padding: 36px;
+  }
+  .donate-strip .cta-box h4 {
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px;
+  }
+  .quick-amounts { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
+  .amt-chip {
+    border: 1px solid var(--line); padding: 14px 0; font-size: 14px; font-weight: 500;
+    background: transparent; transition: all .18s var(--ease);
+  }
+  .amt-chip:hover { border-color: var(--ink); }
+  .amt-chip.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+  .donate-strip .custom-line { display: flex; gap: 8px; margin-bottom: 20px; align-items: center; }
+  .dollar-in {
+    flex: 1; position: relative;
+    border: 1px solid var(--line); background: #fff;
+  }
+  .dollar-in .$ { position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: var(--muted); font-size: 14px; }
+  .dollar-in input { width: 100%; padding: 14px 14px 14px 28px; border: none; outline: none; font-family: inherit; font-size: 14px; background: transparent; }
+  .donate-strip .btn-primary { width: 100%; justify-content: center; padding: 18px; }
+  .donate-strip .foot-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 14px; letter-spacing: 0.04em; }
+
+  /* ===== DONATE MODAL ===== */
+  .donate-modal {
+    position: fixed; inset: 0; background: rgba(13,13,13,0.5);
+    z-index: 90; display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity .35s var(--ease);
+    padding: 20px;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+  .donate-modal.open { opacity: 1; pointer-events: auto; }
+  .donate-modal-card {
+    background: var(--cream);
+    width: 100%; max-width: 520px;
+    max-height: 92vh; overflow-y: auto;
+    padding: 48px 48px 40px;
+    position: relative;
+    transform: translateY(20px);
+    transition: transform .4s var(--ease);
+    box-shadow: 0 24px 80px rgba(0,0,0,0.28);
+  }
+  .donate-modal.open .donate-modal-card { transform: translateY(0); }
+  @media (max-width: 600px) { .donate-modal-card { padding: 36px 24px 28px; } }
+  .donate-modal-card .x-btn { position: absolute; top: 14px; right: 14px; }
+  .donate-modal-card .eyebrow { color: var(--muted); margin-bottom: 12px; }
+  .donate-modal-card h2 { font-size: 38px; line-height: 1.05; letter-spacing: -0.02em; margin-bottom: 12px; }
+  .donate-modal-card .lede { color: var(--muted); font-size: 14px; margin-bottom: 28px; }
+
+  .freq-toggle {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--line); padding: 4px;
+    margin-bottom: 24px;
+  }
+  .freq-toggle button {
+    padding: 10px; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+    font-weight: 500; color: var(--muted);
+    transition: all .2s var(--ease);
+  }
+  .freq-toggle button.active { background: var(--ink); color: var(--cream); }
+
+  .donate-modal-card .group-label {
+    display: block; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 10px; margin-top: 18px;
+  }
+  .donate-modal-card .group-label:first-of-type { margin-top: 0; }
+  .preset-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 4px; }
+  .amt-pill {
+    border: 1px solid var(--line); padding: 16px 0; font-size: 16px; font-weight: 500;
+    background: #fff;
+    transition: all .18s var(--ease);
+  }
+  .amt-pill:hover { border-color: var(--ink); }
+  .amt-pill.active { background: var(--ink); color: var(--cream); border-color: var(--ink); }
+
+  .custom-amt { position: relative; border: 1px solid var(--line); background: #fff; }
+  .custom-amt .dollar-sign {
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    font-size: 16px; color: var(--muted);
+  }
+  .custom-amt input {
+    width: 100%; padding: 16px 16px 16px 34px;
+    border: none; outline: none; font-family: inherit; font-size: 16px; background: transparent;
+  }
+  .donate-note {
+    width: 100%; padding: 14px; border: 1px solid var(--line); background: #fff;
+    font-family: inherit; font-size: 14px; resize: vertical; min-height: 72px;
+    outline: none;
+  }
+  .donate-note:focus, .custom-amt:focus-within { border-color: var(--ink); }
+  .donate-modal-card .btn-primary { width: 100%; justify-content: center; padding: 18px; margin-top: 24px; }
+  .donate-legal { font-size: 11px; color: var(--muted); text-align: center; margin-top: 14px; letter-spacing: 0.02em; }
+</style>
+</head>
+<body>
+
+<!-- ANNOUNCEMENT BAR -->
+<div class="announce copy-slot" data-slot="announcement">
+  Free shipping over $75
+  <span class="dot">•</span>
+  <span class="give">100% of proceeds support our cause</span>
+  <span class="dot">•</span>
+  Free returns
+</div>
+
+<!-- NAV -->
+<nav class="top">
+  <div class="container nav-inner">
+    <div class="nav-links">
+      <a href="#shop">Shop</a>
+      <a href="#story">Our Story</a>
+      <a href="#cause">The Cause</a>
+      <a href="#" onclick="openDonate();return false;" class="nav-donate">Donate</a>
+    </div>
+    <a href="#" class="wordmark">
+      TSE
+      <small>Team Saddiqi Enterprises</small>
+    </a>
+    <div class="nav-right">
+      <button aria-label="Search">Search</button>
+      <button aria-label="Account">Account</button>
+      <button class="cart-btn" onclick="openCart()" aria-label="Cart">
+        Bag
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-media">
+    <img src="assets/hero_lifestyle.jpg" alt="Hands in prayer wearing the Bismillah sweatshirt" />
+    <div class="caption">FW26 · Collection One</div>
+  </div>
+  <div class="hero-copy">
+    <div class="hero-eyebrow mono-caps copy-slot" data-slot="hero eyebrow">Team Saddiqi Enterprises · Collection One</div>
+
+    <h1 class="hero-title serif copy-slot" data-slot="hero headline">
+      <span class="line">Eat. Sleep. Pray.</span>
+      <span class="line">Compete.</span>
+    </h1>
+
+    <p class="hero-sub copy-slot" data-slot="hero subhead">A small collection, built to last. <em>Every order gives back</em> — 100% of proceeds support our cause.</p>
+
+    <div class="hero-ctas">
+      <button class="btn-primary" onclick="scrollToShop()">
+        Shop the Collection
+        <span class="arrow">→</span>
+      </button>
+      <a class="btn-secondary" href="#story">Our Story</a>
+    </div>
+
+    <div class="hero-metric">
+      <div class="m">
+        <div class="num">100%</div>
+        <div class="lbl">Given Back</div>
+      </div>
+      <div class="m">
+        <div class="num">2</div>
+        <div class="lbl">Drops · 1 Cause</div>
+      </div>
+      <div class="m">
+        <div class="num">100%</div>
+        <div class="lbl">Cotton Fleece</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MISSION STRIP -->
+<div class="mission-strip copy-slot" data-slot="mission strip">
+  <strong>100% of proceeds</strong> fund <strong>our cause</strong> — receipts published quarterly.
+</div>
+
+<!-- PRODUCT GRID -->
+<section class="section" id="shop">
+  <div class="container">
+    <div class="section-head">
+      <div>
+        <div class="eyebrow mono-caps">01 · The Collection</div>
+        <h2 class="serif">Built for the daily grind.</h2>
+      </div>
+      <div class="meta copy-slot" data-slot="collection intro">Heavyweight cotton fleece, made to be lived in. Two pieces to start — more to come.</div>
+    </div>
+
+    <div class="grid-products">
+      <!-- Hoodie Card -->
+      <div class="card" onclick="openPDP('hoodie')">
+        <div class="card-media">
+          <div class="card-badge">New</div>
+          <div class="card-badge give" style="top: auto; bottom: 14px;">100% gives back</div>
+          <img class="primary" src="assets/hoodie_back.jpg" alt="Eat Sleep Pray Compete hoodie — back view" />
+          <img class="alt" src="assets/hoodie_front_detail.jpg" alt="Hoodie front detail" />
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">The Bismillah Hoodie</div>
+            <div class="card-sub">Heavyweight fleece · Sand</div>
+          </div>
+          <div class="card-price">$45</div>
+        </div>
+        <div class="card-swatches">
+          <span class="swatch" style="background: #C8B194;" title="Sand"></span>
+          <span class="swatch" style="background: #0D0D0D;" title="Black"></span>
+          <span class="swatch" style="background: #E9E4DA;" title="Bone"></span>
+        </div>
+        <div class="card-give">100% of proceeds support the cause</div>
+      </div>
+
+      <!-- Joggers Card -->
+      <div class="card" onclick="openPDP('joggers')">
+        <div class="card-media">
+          <div class="card-badge">New</div>
+          <div class="card-badge give" style="top: auto; bottom: 14px;">100% gives back</div>
+          <img class="primary" src="assets/joggers_lifestyle.jpg" alt="Compete joggers" />
+          <img class="alt" src="assets/hoodie_front_detail.jpg" alt="Joggers detail" />
+        </div>
+        <div class="card-body">
+          <div>
+            <div class="card-name">The Compete Jogger</div>
+            <div class="card-sub">Tapered fleece · Black</div>
+          </div>
+          <div class="card-price">$72</div>
+        </div>
+        <div class="card-swatches">
+          <span class="swatch" style="background: #0D0D0D;" title="Black"></span>
+          <span class="swatch" style="background: #5A5449;" title="Olive"></span>
+          <span class="swatch" style="background: #C8B194;" title="Sand"></span>
+        </div>
+        <div class="card-give">100% of proceeds support the cause</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="story" id="story">
+  <div class="story-media">
+    <img src="assets/hero_lifestyle.jpg" alt="Brand story" />
+  </div>
+  <div class="story-body">
+    <div class="eyebrow mono-caps">Our Story</div>
+    <h3 class="serif copy-slot" data-slot="story headline">Four words we live by.</h3>
+    <p class="copy-slot" data-slot="story paragraph 1">Eat. Sleep. Pray. Compete. It started as how we talked to each other — at the gym, at the table, in the mosque. It became how we wanted to live.</p>
+    <p class="copy-slot" data-slot="story paragraph 2">This collection is that phrase in cotton. Heavyweight, quiet, built to hold up. Every piece funds the work we care about.</p>
+    <div style="margin-top: 28px;">
+      <a class="btn-secondary" href="#cause">Read the Full Story →</a>
+    </div>
+  </div>
+</section>
+
+<!-- CAUSE -->
+<section class="cause" id="cause">
+  <div class="container">
+    <div class="eyebrow mono-caps" style="color: var(--muted); margin-bottom: 24px;">Why We Give</div>
+    <h2 class="serif big copy-slot" data-slot="cause hero line">100% <em>given back.</em></h2>
+    <p class="copy-slot" data-slot="cause paragraph">Every order funds our chosen cause. No middle layer. No fees deducted from your contribution. Receipts posted here quarterly.</p>
+    <div class="stats">
+      <div class="stat"><div class="num">$0</div><div class="lbl">Donated to date*</div></div>
+      <div class="stat"><div class="num">0</div><div class="lbl">Families supported*</div></div>
+      <div class="stat"><div class="num">Q1 26</div><div class="lbl">First receipt drop</div></div>
+    </div>
+    <p style="margin-top: 24px; font-size: 11px; color: var(--muted-2);">*Live counters update after launch — this section will become the single source of truth for the give-back.</p>
+  </div>
+</section>
+
+<!-- DONATE STRIP -->
+<section class="donate-strip" id="donate-section">
+  <div class="container donate-strip-inner">
+    <div>
+      <div class="eyebrow mono-caps">Give Directly</div>
+      <h2 class="serif copy-slot" data-slot="donate headline">Give directly — <em>skip the shirt.</em></h2>
+      <p class="lede copy-slot" data-slot="donate subhead">Prefer to support the cause without picking out a piece? 100% of your gift goes straight to the work.</p>
+    </div>
+    <div class="cta-box">
+      <h4>Choose an amount</h4>
+      <div class="quick-amounts" id="quickAmounts">
+        <button class="amt-chip" data-amt="25">$25</button>
+        <button class="amt-chip" data-amt="50">$50</button>
+        <button class="amt-chip active" data-amt="100">$100</button>
+        <button class="amt-chip" data-amt="250">$250</button>
+      </div>
+      <div class="custom-line">
+        <div class="dollar-in"><span class="$">$</span><input id="stripAmt" type="number" placeholder="Other amount" /></div>
+      </div>
+      <button class="btn-primary" onclick="openDonate()">
+        Continue → <span id="stripAmtDisplay" style="margin-left:4px;">$100</span>
+      </button>
+      <div class="foot-note">100% of your gift goes to the cause · Secure via Stripe</div>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<div class="values">
+  <div class="value">
+    <div class="ico">◎</div>
+    <div class="t">Free shipping over $75</div>
+    <div class="d">US orders · 3–5 business days</div>
+  </div>
+  <div class="value">
+    <div class="ico">↺</div>
+    <div class="t">Free 30-day returns</div>
+    <div class="d">Unworn, tags on</div>
+  </div>
+  <div class="value">
+    <div class="ico">♡</div>
+    <div class="t">100% gives back</div>
+    <div class="d">Every single order</div>
+  </div>
+  <div class="value">
+    <div class="ico">✦</div>
+    <div class="t">Made to last</div>
+    <div class="d">Heavyweight cotton fleece</div>
+  </div>
+</div>
+
+<!-- NEWSLETTER -->
+<section class="newsletter">
+  <div class="container">
+    <h3 class="serif copy-slot" data-slot="newsletter headline">First access to new <em>drops.</em></h3>
+    <p class="copy-slot" data-slot="newsletter subhead">Drops are small, rare, and often sell through. Join the list to hear first.</p>
+    <form name="newsletter" method="POST" onsubmit="handleNewsletter(event, this)">
+      <p class="hidden" style="display:none;" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+      <input type="email" name="email" placeholder="your@email.com" required />
+      <button type="submit">Join →</button>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="foot-grid">
+      <div>
+        <div class="foot-word">TSE</div>
+        <div class="foot-tag copy-slot" data-slot="footer tagline">Purpose-built apparel. Every order funds the work we care about.</div>
+      </div>
+      <div class="foot-col">
+        <h5>Shop</h5>
+        <a href="#shop">Hoodies</a>
+        <a href="#shop">Joggers</a>
+        <a href="#" onclick="openDonate();return false;">Gift the cause</a>
+      </div>
+      <div class="foot-col">
+        <h5>Help</h5>
+        <a href="pages/shipping.html">Shipping</a>
+        <a href="pages/returns.html">Returns</a>
+        <a href="pages/contact.html">Contact</a>
+      </div>
+      <div class="foot-col">
+        <h5>About</h5>
+        <a href="#story">Our story</a>
+        <a href="#cause">The cause</a>
+        <a href="pages/contact.html">Press</a>
+      </div>
+    </div>
+    <div class="foot-bottom">
+      <div>© 2026 Team Saddiqi Enterprises</div>
+      <div><a href="pages/privacy.html">Privacy</a> · <a href="pages/terms.html">Terms</a> · <a href="pages/returns.html">Returns</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ============= OVERLAYS ============= -->
+
+<!-- DIM OVERLAY -->
+<div class="overlay" id="dim" onclick="closeAll()"></div>
+
+<!-- CART DRAWER -->
+<aside class="drawer" id="cart">
+  <div class="drawer-head">
+    <h4>Your Bag (<span id="drawerCount">0</span>)</h4>
+    <button class="x-btn" onclick="closeCart()">✕</button>
+  </div>
+  <div class="drawer-body" id="cartItems">
+    <div class="empty-state" id="emptyState">
+      <div class="ico">◌</div>
+      <h5>Your bag is empty</h5>
+      <p>Start with a piece from the collection.</p>
+    </div>
+  </div>
+  <div class="drawer-foot hidden" id="drawerFoot">
+    <div class="drawer-give" id="drawerGive">Your bag includes a <strong>$0</strong> donation to the cause.</div>
+    <div class="subtotal-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
+    <div class="ship-note">Shipping, taxes, and discounts calculated at checkout.</div>
+    <button class="btn-primary" onclick="openCheckout()">Checkout <span class="arrow">→</span></button>
+  </div>
+</aside>
+
+<!-- PDP -->
+<div class="pdp-view" id="pdp">
+  <button class="pdp-close" onclick="closePDP()">← Back to shop</button>
+  <div class="pdp-grid">
+    <div class="pdp-gallery" id="pdpGallery">
+      <!-- images injected -->
+    </div>
+    <div class="pdp-side">
+      <div class="pdp-bread"><a href="#" onclick="closePDP();return false;">Shop</a> / <span id="pdpCategory">Hoodies</span></div>
+      <h1 class="pdp-title serif" id="pdpTitle">The Bismillah Hoodie</h1>
+      <div class="pdp-price-row">
+        <div class="pdp-price" id="pdpPrice">$88</div>
+      </div>
+      <div class="pdp-give-inline" id="pdpGive">♡ 100% of proceeds support our cause</div>
+
+      <p class="pdp-desc copy-slot" data-slot="PDP description" id="pdpDesc">
+        Heavyweight 100% cotton fleece. Relaxed fit, built to become your go-to. Every order gives back — 100% of proceeds support our cause.
+      </p>
+
+      <div class="pdp-group">
+        <div class="lbl"><span>Color — <span id="pdpColorName">Sand</span></span></div>
+        <div class="swatches">
+          <div class="sw-big active" style="background: #C8B194;" onclick="setColor(this,'Sand')"></div>
+          <div class="sw-big" style="background: #0D0D0D;" onclick="setColor(this,'Black')"></div>
+          <div class="sw-big" style="background: #E9E4DA;" onclick="setColor(this,'Bone')"></div>
+        </div>
+      </div>
+
+      <div class="pdp-group">
+        <div class="lbl"><span>Size</span><a href="#" onclick="event.preventDefault()">Size guide</a></div>
+        <div class="sizes">
+          <div class="size-pill">XS</div>
+          <div class="size-pill">S</div>
+          <div class="size-pill active">M</div>
+          <div class="size-pill">L</div>
+          <div class="size-pill">XL</div>
+          <div class="size-pill oos">XXL</div>
+        </div>
+      </div>
+
+      <button class="pdp-add" onclick="addCurrentToBag()">Add to Bag — <span id="pdpAddPrice">$88</span></button>
+
+      <div class="pdp-ship">
+        <span>◎ Free shipping over $75</span>
+        <span>↺ Free returns</span>
+      </div>
+
+      <div class="pdp-accordion">
+        <div class="acc-item open">
+          <button class="acc-head" onclick="toggleAcc(this)">
+            <span>Fit & Materials</span><span class="plus">+</span>
+          </button>
+          <div class="acc-body"><p class="copy-slot" data-slot="PDP fit/materials">100% cotton fleece, ~400 GSM. Relaxed fit — true to size for a drape, size down for regular. Machine wash cold, tumble dry low.</p></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" onclick="toggleAcc(this)">
+            <span>Shipping & Returns</span><span class="plus">+</span>
+          </button>
+          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">Free US shipping over $75, otherwise $6 flat. Standard 3–5 business days. Free 30-day returns on unworn items with tags — full <a href="pages/shipping.html" style="text-decoration:underline;">shipping</a> &amp; <a href="pages/returns.html" style="text-decoration:underline;">returns</a> policy.</p></div>
+        </div>
+        <div class="acc-item">
+          <button class="acc-head" onclick="toggleAcc(this)">
+            <span>Our Give-Back</span><span class="plus">+</span>
+          </button>
+          <div class="acc-body"><p class="copy-slot" data-slot="PDP cause">100% of proceeds from this piece go to our chosen cause. Impact receipts are published quarterly on the <a href="#cause" style="text-decoration:underline;">cause page</a>.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHECKOUT LOADING STATE (shown briefly before Stripe redirect) -->
+<div class="checkout-loading" id="checkoutLoading" style="position:fixed;inset:0;background:var(--cream);z-index:100;display:none;align-items:center;justify-content:center;flex-direction:column;">
+  <div style="width:40px;height:40px;border:2px solid var(--line);border-top-color:var(--ink);border-radius:50%;animation:spin 0.8s linear infinite;"></div>
+  <div style="margin-top:24px;font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--muted);">Connecting to secure checkout…</div>
+</div>
+<style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+
+<!-- DONATE MODAL -->
+<div class="donate-modal" id="donateModal">
+  <div class="donate-modal-card">
+    <button class="x-btn" onclick="closeDonate()">✕</button>
+    <div class="mono-caps eyebrow" style="color: var(--muted); margin-bottom: 10px;">Give Directly</div>
+    <h2 class="serif">Support the cause.</h2>
+    <p class="lede">100% of your gift goes to the cause. No middle layer, no fees deducted from your gift.</p>
+
+    <div class="freq-toggle" id="freqToggle">
+      <button class="active" data-freq="one-time">One-time</button>
+      <button data-freq="monthly">Monthly</button>
+    </div>
+
+    <label class="group-label">Amount</label>
+    <div class="preset-grid" id="presetGrid">
+      <button class="amt-pill" data-amt="25">$25</button>
+      <button class="amt-pill" data-amt="50">$50</button>
+      <button class="amt-pill active" data-amt="100">$100</button>
+      <button class="amt-pill" data-amt="250">$250</button>
+      <button class="amt-pill" data-amt="500">$500</button>
+      <button class="amt-pill" data-amt="1000">$1,000</button>
+    </div>
+
+    <label class="group-label">Custom amount</label>
+    <div class="custom-amt">
+      <span class="dollar-sign">$</span>
+      <input id="donateCustom" type="number" min="1" placeholder="Other amount" />
+    </div>
+
+    <label class="group-label">Add a note (optional)</label>
+    <textarea id="donateNote" class="donate-note" placeholder="A message for the team…"></textarea>
+
+    <button class="btn-primary" onclick="donateToCheckout()">
+      Continue to Payment → <span id="donateAmtDisplay">$100</span>
+    </button>
+    <div class="donate-legal">Secure via Stripe · Tax receipt emailed on completion</div>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+  // ==================== CONFIG ====================
+  // TSE_CONFIG is defined in /config.js. Update publishable key + charity name there.
+  const BRAND = (window.TSE_CONFIG && window.TSE_CONFIG.brand) || { causeName: 'the cause' };
+  const STRIPE_PK = (window.TSE_CONFIG && window.TSE_CONFIG.stripePublishableKey) || '';
+  const stripe = STRIPE_PK && window.Stripe ? window.Stripe(STRIPE_PK) : null;
+
+  // ==================== DATA ====================
+  // price is in USD dollars (will be converted to cents on the server)
+  // sku is what Stripe uses as the line-item name (e.g. "HOODIE-SAND-M")
+  const PRODUCTS = {
+    hoodie: {
+      id: 'hoodie',
+      name: 'The Bismillah Hoodie',
+      category: 'Hoodies',
+      sub: 'Heavyweight fleece · Sand',
+      price: 45,
+      give: 45,
+      color: 'Sand',
+      colors: ['Sand', 'Black', 'Bone'],
+      sizes: ['XS', 'S', 'M', 'L', 'XL'],
+      images: [
+        { src: 'assets/hoodie_back.jpg', wide: true },
+        { src: 'assets/hoodie_front_detail.jpg' },
+        { src: 'assets/hero_lifestyle.jpg' },
+        { src: 'assets/joggers_lifestyle.jpg' },
+      ],
+      desc: 'Heavyweight 100% cotton fleece. Relaxed fit, built to become your go-to. Every order gives back — 100% of proceeds support our cause.'
+    },
+    joggers: {
+      id: 'joggers',
+      name: 'The Compete Jogger',
+      category: 'Joggers',
+      sub: 'Tapered fleece · Black',
+      price: 72,
+      give: 72,
+      color: 'Black',
+      colors: ['Black', 'Olive', 'Sand'],
+      sizes: ['XS', 'S', 'M', 'L', 'XL'],
+      images: [
+        { src: 'assets/joggers_lifestyle.jpg', wide: true },
+        { src: 'assets/hoodie_front_detail.jpg' },
+        { src: 'assets/hero_lifestyle.jpg' },
+        { src: 'assets/hoodie_back.jpg' },
+      ],
+      desc: 'Tapered heavyweight cotton fleece. Ribbed cuffs, deep pockets, built for the grind. Every order gives back — 100% of proceeds support our cause.'
+    }
+  };
+
+  // ==================== STATE ====================
+  const cart = [];
+  let currentProduct = null;
+  let currentSize = 'M';
+  let checkoutMode = 'cart';            // 'cart' | 'donate'
+  const donateState = { amount: 100, frequency: 'one-time', note: '' };
+
+  // ==================== CART ====================
+  function addToBag(productId, size) {
+    const p = PRODUCTS[productId];
+    const key = productId + '-' + size + '-' + p.color;
+    const existing = cart.find(i => i.key === key);
+    if (existing) existing.qty++;
+    else cart.push({
+      key, id: productId, name: p.name, price: p.price, give: p.give,
+      color: p.color, size, qty: 1, image: p.images[0].src
+    });
+    renderCart();
+    bumpCart();
+  }
+  function addCurrentToBag() {
+    addToBag(currentProduct.id, currentSize);
+    closePDP();
+    openCart();
+  }
+  function removeFromCart(key) {
+    const i = cart.findIndex(x => x.key === key);
+    if (i > -1) cart.splice(i, 1);
+    renderCart();
+  }
+  function changeQty(key, delta) {
+    const item = cart.find(x => x.key === key);
+    if (!item) return;
+    item.qty = Math.max(1, item.qty + delta);
+    renderCart();
+  }
+  function bumpCart() {
+    const el = document.getElementById('cartCount');
+    el.classList.remove('bump');
+    void el.offsetWidth;
+    el.classList.add('bump');
+  }
+  function renderCart() {
+    const count = cart.reduce((s, i) => s + i.qty, 0);
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const give = cart.reduce((s, i) => s + i.give * i.qty, 0);
+    document.getElementById('cartCount').textContent = count;
+    document.getElementById('drawerCount').textContent = count;
+    document.getElementById('subTotal').textContent = '$' + subtotal;
+
+    const items = document.getElementById('cartItems');
+    const foot = document.getElementById('drawerFoot');
+    const empty = document.getElementById('emptyState');
+
+    if (cart.length === 0) {
+      items.innerHTML = '';
+      items.appendChild(empty);
+      foot.classList.add('hidden');
+      return;
+    }
+    foot.classList.remove('hidden');
+    items.innerHTML = cart.map(item => `
+      <div class="line-item">
+        <img src="${item.image}" alt="" />
+        <div class="li-body">
+          <div class="li-top">
+            <div class="name">${item.name}</div>
+            <div class="opts">${item.color} · ${item.size}</div>
+            <div class="li-give">♡ $${item.give * item.qty} to the cause</div>
+          </div>
+          <div class="li-bot">
+            <div class="qty">
+              <button onclick="changeQty('${item.key}', -1)">−</button>
+              <span>${item.qty}</span>
+              <button onclick="changeQty('${item.key}', 1)">+</button>
+            </div>
+            <div style="display:flex;align-items:center;gap:14px;">
+              <button class="li-remove" onclick="removeFromCart('${item.key}')">Remove</button>
+              <div class="li-price">$${item.price * item.qty}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    document.getElementById('drawerGive').innerHTML = `Your bag includes a <strong>$${give}</strong> donation to ${BRAND.causeName}.`;
+  }
+
+  // ==================== UI TOGGLES ====================
+  const html = document.documentElement;
+  const dim = document.getElementById('dim');
+
+  function openCart() {
+    document.getElementById('cart').classList.add('open');
+    dim.classList.add('open');
+    html.classList.add('lock');
+  }
+  function closeCart() {
+    document.getElementById('cart').classList.remove('open');
+    dim.classList.remove('open');
+    html.classList.remove('lock');
+  }
+  function openPDP(id) {
+    currentProduct = PRODUCTS[id];
+    currentSize = 'M';
+    // populate
+    document.getElementById('pdpTitle').textContent = currentProduct.name;
+    document.getElementById('pdpCategory').textContent = currentProduct.category;
+    document.getElementById('pdpPrice').textContent = '$' + currentProduct.price;
+    document.getElementById('pdpGive').innerHTML = `♡ 100% of proceeds support ${BRAND.causeName}`;
+    document.getElementById('pdpDesc').textContent = currentProduct.desc;
+    document.getElementById('pdpAddPrice').textContent = '$' + currentProduct.price;
+    document.getElementById('pdpColorName').textContent = currentProduct.color;
+
+    const g = document.getElementById('pdpGallery');
+    g.innerHTML = currentProduct.images.map(i =>
+      `<img src="${i.src}" alt="" class="${i.wide ? 'wide' : ''}" />`
+    ).join('');
+
+    document.getElementById('pdp').classList.add('open');
+    html.classList.add('lock');
+  }
+  function closePDP() {
+    document.getElementById('pdp').classList.remove('open');
+    if (!document.getElementById('cart').classList.contains('open')) html.classList.remove('lock');
+  }
+  async function openCheckout() {
+    if (cart.length === 0) return;
+    checkoutMode = 'cart';
+    await startStripeCheckout({
+      mode: 'payment',
+      items: cart.map(i => ({
+        name: `${i.name} — ${i.color} / ${i.size}`,
+        sku: `${i.id.toUpperCase()}-${i.color.toUpperCase()}-${i.size}`,
+        unit_amount: i.price * 100, // cents
+        quantity: i.qty,
+        image: window.location.origin + '/' + i.image,
+      })),
+    });
+  }
+  function closeAll() {
+    closeCart();
+  }
+
+  // ==================== STRIPE ====================
+  async function startStripeCheckout(payload) {
+    if (!stripe) {
+      alert('Checkout is not configured yet. Please set your Stripe publishable key in config.js.');
+      return;
+    }
+    const loader = document.getElementById('checkoutLoading');
+    loader.style.display = 'flex';
+    try {
+      const res = await fetch('/api/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(`Server returned ${res.status}: ${text}`);
+      }
+      const data = await res.json();
+      if (data.url) {
+        window.location.href = data.url;
+        return;
+      }
+      if (data.id) {
+        const { error } = await stripe.redirectToCheckout({ sessionId: data.id });
+        if (error) throw error;
+        return;
+      }
+      throw new Error('Unexpected response from checkout service.');
+    } catch (err) {
+      console.error('[Stripe checkout error]', err);
+      loader.style.display = 'none';
+      alert('Something went wrong starting checkout. Please try again, or email orders@teamsiddiqi.com if it keeps happening.');
+    }
+  }
+
+  // ==================== PDP interactions ====================
+  function setColor(el, name) {
+    el.parentElement.querySelectorAll('.sw-big').forEach(s => s.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('pdpColorName').textContent = name;
+    if (currentProduct) currentProduct.color = name;
+  }
+  document.addEventListener('click', (e) => {
+    if (e.target.classList.contains('size-pill') && !e.target.classList.contains('oos')) {
+      e.target.parentElement.querySelectorAll('.size-pill').forEach(s => s.classList.remove('active'));
+      e.target.classList.add('active');
+      currentSize = e.target.textContent.trim();
+    }
+  });
+  function toggleAcc(btn) {
+    btn.parentElement.classList.toggle('open');
+  }
+
+  // ==================== (Checkout rendering is now handled by Stripe hosted Checkout.) ====================
+
+  // ==================== DONATE ====================
+  function openDonate() {
+    document.getElementById('donateModal').classList.add('open');
+    html.classList.add('lock');
+    syncDonateUI();
+  }
+  function closeDonate() {
+    document.getElementById('donateModal').classList.remove('open');
+    if (!document.getElementById('checkout').classList.contains('open')) html.classList.remove('lock');
+  }
+  function syncDonateUI() {
+    // Sync preset pills
+    document.querySelectorAll('#presetGrid .amt-pill').forEach(p => {
+      p.classList.toggle('active', Number(p.dataset.amt) === donateState.amount);
+    });
+    // Sync freq
+    document.querySelectorAll('#freqToggle button').forEach(b => {
+      b.classList.toggle('active', b.dataset.freq === donateState.frequency);
+    });
+    // Sync display
+    const freqLabel = donateState.frequency === 'monthly' ? '/mo' : '';
+    document.getElementById('donateAmtDisplay').textContent = '$' + donateState.amount + freqLabel;
+    document.getElementById('stripAmtDisplay').textContent = '$' + donateState.amount;
+    document.querySelectorAll('#quickAmounts .amt-chip').forEach(c => {
+      c.classList.toggle('active', Number(c.dataset.amt) === donateState.amount);
+    });
+  }
+  function setDonateAmount(amt) {
+    donateState.amount = Number(amt);
+    syncDonateUI();
+  }
+  async function donateToCheckout() {
+    // Honor custom amount if entered and valid
+    const custom = document.getElementById('donateCustom').value;
+    if (custom && Number(custom) > 0) donateState.amount = Number(custom);
+    donateState.note = document.getElementById('donateNote').value || '';
+    checkoutMode = 'donate';
+    closeDonate();
+    const isMonthly = donateState.frequency === 'monthly';
+    await startStripeCheckout({
+      mode: isMonthly ? 'subscription' : 'payment',
+      donation: {
+        amount: Math.round(donateState.amount * 100), // cents
+        interval: isMonthly ? 'month' : null,
+        note: donateState.note || '',
+      },
+    });
+  }
+
+  // ==================== NEWSLETTER ====================
+  async function handleNewsletter(e, form) {
+    e.preventDefault();
+    const btn = form.querySelector('button[type=submit]');
+    const original = btn.textContent;
+
+    // Honeypot: if the hidden bot-field is filled, silently "succeed"
+    const honey = form.querySelector('input[name=bot-field]');
+    if (honey && honey.value) {
+      btn.textContent = 'Thanks — you\u2019re in.';
+      return;
+    }
+
+    const email = form.querySelector('input[type=email]').value.trim();
+    if (!email) return;
+
+    btn.textContent = 'Sending…';
+    try {
+      const res = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email }),
+      });
+      if (!res.ok) throw new Error('Bad response ' + res.status);
+      btn.textContent = 'Thanks — you\u2019re in.';
+      form.querySelector('input[type=email]').value = '';
+    } catch (err) {
+      console.error('[newsletter]', err);
+      btn.textContent = original;
+      alert('Could not subscribe — please try again.');
+    }
+  }
+
+  // Wire up preset pills / freq toggle / quick chips
+  document.addEventListener('click', (e) => {
+    // Preset amount pills
+    if (e.target.matches('#presetGrid .amt-pill')) {
+      setDonateAmount(e.target.dataset.amt);
+      document.getElementById('donateCustom').value = '';
+    }
+    // Frequency toggle
+    if (e.target.matches('#freqToggle button')) {
+      donateState.frequency = e.target.dataset.freq;
+      syncDonateUI();
+    }
+    // Landing-strip quick chips
+    if (e.target.matches('#quickAmounts .amt-chip')) {
+      setDonateAmount(e.target.dataset.amt);
+      document.getElementById('stripAmt').value = '';
+    }
+  });
+  // Custom amount on landing strip updates state live
+  document.addEventListener('input', (e) => {
+    if (e.target && e.target.id === 'stripAmt') {
+      const v = Number(e.target.value);
+      if (v > 0) {
+        donateState.amount = v;
+        // unclear pills
+        document.querySelectorAll('#quickAmounts .amt-chip').forEach(c => c.classList.remove('active'));
+        document.getElementById('stripAmtDisplay').textContent = '$' + v;
+      }
+    }
+    if (e.target && e.target.id === 'donateCustom') {
+      const v = Number(e.target.value);
+      if (v > 0) {
+        donateState.amount = v;
+        document.querySelectorAll('#presetGrid .amt-pill').forEach(c => c.classList.remove('active'));
+        syncDonateUI();
+      }
+    }
+  });
+
+  function scrollToShop() {
+    document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+  }
+
+  // Seed: initial render
+  renderCart();
+</script>
+</body>
+</html>

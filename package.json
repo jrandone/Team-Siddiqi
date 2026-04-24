@@ -1,0 +1,9 @@
+{
+  "name": "tse-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "teamsiddiqi.com — static site plus Stripe checkout function on Vercel.",
+  "dependencies": {
+    "stripe": "^14.25.0"
+  }
+}

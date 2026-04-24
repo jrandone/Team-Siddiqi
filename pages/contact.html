@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Contact — TSE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="shared.css" />
+<style>
+  form.contact { display: flex; flex-direction: column; gap: 12px; max-width: 520px; margin-top: 28px; }
+  form.contact label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+  form.contact input, form.contact textarea, form.contact select {
+    width: 100%; padding: 14px; border: 1px solid var(--line); background: #fff;
+    font-family: inherit; font-size: 14px; color: var(--ink); outline: none; border-radius: 2px;
+  }
+  form.contact textarea { min-height: 140px; resize: vertical; }
+  form.contact input:focus, form.contact textarea:focus, form.contact select:focus { border-color: var(--ink); }
+  form.contact button {
+    padding: 16px; background: var(--ink); color: var(--cream);
+    font-family: inherit; font-size: 13px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 500;
+    border: none; cursor: pointer; margin-top: 8px;
+  }
+  form.contact button:hover { background: #2a2622; }
+  .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin-top: 40px; }
+  @media (max-width: 720px) { .contact-grid { grid-template-columns: 1fr; } }
+  .contact-block h3 { font-family: 'Instrument Serif', serif; font-size: 22px; margin-bottom: 6px; letter-spacing: -0.01em; font-weight: 400; }
+  .contact-block p { font-size: 14px; color: var(--muted); margin: 0; }
+  .contact-block a { color: var(--ink); }
+</style>
+</head>
+<body>
+<nav class="page-nav"><div class="page-nav-inner">
+  <a href="/" class="brand">TSE</a>
+  <a href="/" class="back">← Back to shop</a>
+</div></nav>
+
+<main class="page">
+  <div class="eyebrow">Get in touch</div>
+  <h1 class="serif">Contact</h1>
+  <p class="lede">Order questions, collaboration, press, or feedback on the cause — reach us here. We try to reply within one business day.</p>
+
+  <div class="contact-grid">
+    <div class="contact-block">
+      <h3>Orders</h3>
+      <p><a href="mailto:orders@teamsiddiqi.com">orders@teamsiddiqi.com</a></p>
+      <p style="margin-top:8px;">Returns, shipping, exchanges.</p>
+    </div>
+    <div class="contact-block">
+      <h3>Everything else</h3>
+      <p><a href="mailto:hello@teamsiddiqi.com">hello@teamsiddiqi.com</a></p>
+      <p style="margin-top:8px;">Press, partnerships, the cause.</p>
+    </div>
+  </div>
+
+  <form class="contact" id="contactForm" name="contact" method="POST" onsubmit="return handleContact(event, this)">
+    <p class="hidden" style="display:none;" aria-hidden="true"><label>Don't fill this out: <input name="bot-field" tabindex="-1" autocomplete="off" /></label></p>
+
+    <label for="c-name">Name</label>
+    <input id="c-name" name="name" type="text" required />
+
+    <label for="c-email">Email</label>
+    <input id="c-email" name="email" type="email" required />
+
+    <label for="c-topic">Topic</label>
+    <select id="c-topic" name="topic">
+      <option>Order question</option>
+      <option>Press / partnerships</option>
+      <option>Product feedback</option>
+      <option>The cause</option>
+      <option>Something else</option>
+    </select>
+
+    <label for="c-msg">Message</label>
+    <textarea id="c-msg" name="message" required></textarea>
+
+    <button type="submit">Send →</button>
+    <p id="c-status" role="status" aria-live="polite" style="margin-top:10px; font-size:13px; color:var(--muted); min-height:18px;"></p>
+  </form>
+</main>
+
+<script>
+  async function handleContact(e, form) {
+    e.preventDefault();
+    const btn = form.querySelector('button[type=submit]');
+    const status = document.getElementById('c-status');
+    const original = btn.textContent;
+
+    // Honeypot
+    const honey = form.querySelector('input[name=bot-field]');
+    if (honey && honey.value) {
+      status.textContent = 'Thanks — message received.';
+      form.reset();
+      return false;
+    }
+
+    const payload = {
+      name: form.name.value.trim(),
+      email: form.email.value.trim(),
+      topic: form.topic.value,
+      message: form.message.value.trim(),
+    };
+
+    btn.disabled = true;
+    btn.textContent = 'Sending…';
+    status.textContent = '';
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || ('HTTP ' + res.status));
+      btn.textContent = 'Thanks — sent.';
+      status.textContent = 'We\u2019ll reply within one business day.';
+      form.reset();
+    } catch (err) {
+      console.error('[contact]', err);
+      btn.disabled = false;
+      btn.textContent = original;
+      status.textContent = 'Could not send — please email us directly at hello@teamsiddiqi.com.';
+    }
+    return false;
+  }
+</script>
+
+<footer class="page-foot">
+  © 2026 Team Saddiqi Enterprises ·
+  <a href="/pages/privacy.html">Privacy</a> ·
+  <a href="/pages/terms.html">Terms</a> ·
+  <a href="/pages/shipping.html">Shipping</a> ·
+  <a href="/pages/returns.html">Returns</a>
+</footer>
+</body>
+</html>

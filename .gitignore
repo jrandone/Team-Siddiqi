@@ -1,0 +1,28 @@
+# deps / build artifacts
+node_modules/
+.vercel/
+
+# secrets & local overrides
+.env
+.env.*
+!.env.example
+
+# OS cruft
+.DS_Store
+Thumbs.db
+
+# editor
+.vscode/
+.idea/
+*.swp
+
+# design reference — not needed in production repo
+screenshots/
+TSE-mockup.html
+
+# original source photos (raw uploads, not used by the live site)
+# comment these out if you want to version them
+*.HEIC
+1775072209243.JPG
+1775094248143.JPG
+28F7B6DF-6AD7-43CD-BE52-A5A03B5F125F.PNG
