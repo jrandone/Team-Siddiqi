@@ -125,8 +125,12 @@
   .hero-sub em { color: var(--ink); font-style: normal; font-weight: 500; }
   .hero-note {
     font-style: italic; font-size: 15px; line-height: 1.55;
-    color: var(--tan-deep); max-width: 480px;
+    color: var(--ink); max-width: 480px;
     margin: -10px 0 28px;
+  }
+  .hero-note .bismillah {
+    font-weight: 700; font-size: 19px;
+    color: var(--tan-deep); letter-spacing: -0.005em;
   }
   .hero-note strong { font-weight: 700; font-style: italic; color: var(--ink); }
   .hero-placeholder-note {
@@ -780,7 +784,7 @@
       <span class="line">Compete.</span>
     </h1>
 
-    <p class="hero-note copy-slot" data-slot="hero bismillah note">Bismillah means in the name of Allah (or God)—said before the start of any action. You got this— with God by your side, you <strong>CAN</strong> do anything with the right mindset.</p>
+    <p class="hero-note copy-slot" data-slot="hero bismillah note"><span class="bismillah">Bismillah</span> means in the name of Allah (or God)—said before the start of any action. You got this— with God by your side, you <strong>CAN</strong> do anything with the right mindset.</p>
 
     <p class="hero-sub copy-slot" data-slot="hero subhead">A small collection, built to last. <em>Every order gives back</em> — 100% of proceeds support our cause.</p>
 
@@ -1141,7 +1145,6 @@
         { src: 'assets/hoodie_back.jpg', wide: true },
         { src: 'assets/hoodie_front_detail.jpg' },
         { src: 'assets/hero_lifestyle.jpg' },
-        { src: 'assets/joggers_lifestyle.jpg' },
       ],
       desc: 'Heavyweight 100% cotton fleece. Relaxed fit, built to become your go-to. Offered in Adult, Youth, and Toddler fits. Every order gives back — 100% of proceeds support our cause.',
       tiers: {
