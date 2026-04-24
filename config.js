@@ -18,9 +18,6 @@ window.TSE_CONFIG = {
     // Once you finalize the charity name, update this one string.
     causeName: "our cause",
 
-    // Shown in order confirmation emails / support replies.
-    supportEmail: "orders@teamsiddiqi.com",
-
     // Production URL — used to build absolute links in emails & Stripe redirects.
     canonicalUrl: "https://teamsiddiqi.com"
   }
