@@ -17,6 +17,16 @@ const Stripe = require('stripe');
 
 const ALLOWED_COUNTRIES = ['US', 'CA']; // expand later if you ship wider
 
+// Stripe Price IDs per fit tier. Update these if you create new prices in Stripe
+// (Dashboard -> Products -> click product -> click price). Keys must match the
+// `tier` strings sent from the frontend (PRODUCTS.hoodie.tiers in index.html).
+const TIER_PRICE_IDS = {
+  'Adult S–XL':    'price_1TQrzIGgXyid7BicmPbXg9sX', // $45
+  'Adult 2XL–4XL': 'price_1TQrzsGgXyid7BicQ8MdQhUk', // $48
+  'Youth S–L':     'price_1TQs0MGgXyid7BicGU6L5lSd', // $25
+  'Toddler 2T–5T': 'price_1TQs0rGgXyid7Bic2VZS4qSb', // $40
+};
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
@@ -86,18 +96,17 @@ module.exports = async (req, res) => {
       return res.status(400).json({ error: 'Cart is empty.' });
     }
 
-    const line_items = items.map((i) => ({
-      price_data: {
-        currency: 'usd',
-        unit_amount: Number(i.unit_amount),
-        product_data: {
-          name: String(i.name || 'TSE item'),
-          metadata: { sku: String(i.sku || '') },
-          images: i.image ? [String(i.image)] : [],
-        },
-      },
-      quantity: Number(i.quantity) || 1,
-    }));
+    const line_items = [];
+    for (const i of items) {
+      const priceId = TIER_PRICE_IDS[i.tier];
+      if (!priceId) {
+        return res.status(400).json({ error: `Unknown tier in cart: ${i.tier || '(missing)'}` });
+      }
+      line_items.push({
+        price: priceId,
+        quantity: Number(i.quantity) || 1,
+      });
+    }
 
     const shipping_options = [
       {
@@ -134,6 +143,10 @@ module.exports = async (req, res) => {
       metadata: {
         type: 'order',
         item_count: String(items.reduce((s, i) => s + Number(i.quantity), 0)),
+        cart_details: items
+          .map(i => `${i.quantity}× ${i.tier} · ${i.color} · ${i.size}`)
+          .join('; ')
+          .slice(0, 500),
       },
     });
 
