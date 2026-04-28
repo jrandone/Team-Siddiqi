@@ -370,6 +370,12 @@
   .subtotal-row.total { font-size: 16px; font-weight: 600; padding-top: 10px; border-top: 1px solid var(--line); margin-top: 10px; }
   .ship-note { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
   .drawer-foot .btn-primary { width: 100%; justify-content: center; padding: 16px; }
+  .keep-shopping {
+    display: block; text-align: center; margin-top: 14px;
+    font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+  }
+  .keep-shopping:hover { color: var(--ink); }
   .drawer-give {
     background: rgba(166, 137, 106, 0.1); color: var(--tan-deep);
     padding: 10px 14px; font-size: 12px; text-align: center;
@@ -992,6 +998,7 @@
     <div class="subtotal-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
     <div class="ship-note">Shipping, taxes, and discounts calculated at checkout.</div>
     <button class="btn-primary" onclick="openCheckout()">Checkout <span class="arrow">→</span></button>
+    <a href="#" onclick="closeCart();return false;" class="keep-shopping">← Keep Shopping</a>
   </div>
 </aside>
 
@@ -1044,7 +1051,7 @@
           <button class="acc-head" onclick="toggleAcc(this)">
             <span>Shipping & Policy</span><span class="plus">+</span>
           </button>
-          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">$8 flat standard US shipping. <strong>All sales final</strong> — please check size, color, and address before checkout. Damaged or wrong items will be replaced. Reach us through our <a href="pages/contact.html" style="text-decoration:underline;">contact form</a>.</p><p class="copy-slot" data-slot="PDP shipping note" style="margin-top: 10px;">We are new to this and working after school in between our sports — please allow up to <strong>30 days</strong> for our initial launch orders. We hope to get more efficient soon.</p></div>
+          <div class="acc-body"><p class="copy-slot" data-slot="PDP shipping">$10.99 flat standard US shipping. The cost to ship is so expensive, we have to charge. OR you can coordinate pick up from us. <strong>All sales final…</strong></p><p class="copy-slot" data-slot="PDP shipping note" style="margin-top: 10px;">We are new to this and working after school in between our sports — please allow up to <strong>30 days</strong> for our initial launch orders. We hope to get more efficient soon.</p></div>
         </div>
         <div class="acc-item">
           <button class="acc-head" onclick="toggleAcc(this)">
@@ -1359,11 +1366,10 @@
     await startStripeCheckout({
       mode: 'payment',
       items: cart.map(i => ({
-        name: `${i.name}${i.tier ? ' — ' + i.tier : ''} · ${i.color} · ${i.size}`,
-        sku: `${i.id.toUpperCase()}-${(i.tier || 'BASE').replace(/[^A-Z0-9]+/gi, '')}-${i.color.replace(/[^A-Z0-9]+/gi, '').toUpperCase()}-${i.size}`,
-        unit_amount: i.price * 100, // cents
+        tier: i.tier,
+        color: i.color,
+        size: i.size,
         quantity: i.qty,
-        image: window.location.origin + '/' + i.image,
       })),
     });
   }
