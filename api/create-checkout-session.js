@@ -24,7 +24,7 @@ const TIER_PRICE_IDS = {
   'Adult S–XL':    'price_1TQrzIGgXyid7BicmPbXg9sX', // $45
   'Adult 2XL–4XL': 'price_1TQrzsGgXyid7BicQ8MdQhUk', // $48
   'Youth S–L':     'price_1TQs0MGgXyid7BicGU6L5lSd', // $25
-  'Toddler 2T–5T': 'price_1TQs0rGgXyid7Bic2VZS4qSb', // $40
+  'Toddler 2T–5T': 'price_1TQs0rGgXyid7Bic2VZS4qSb', // $45
 };
 
 module.exports = async (req, res) => {
