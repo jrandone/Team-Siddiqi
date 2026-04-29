@@ -112,7 +112,7 @@ module.exports = async (req, res) => {
       {
         shipping_rate_data: {
           type: 'fixed_amount',
-          fixed_amount: { amount: 1099, currency: 'usd' },
+          fixed_amount: { amount: 999, currency: 'usd' },
           display_name: 'Standard shipping',
           delivery_estimate: {
             minimum: { unit: 'business_day', value: 7 },
