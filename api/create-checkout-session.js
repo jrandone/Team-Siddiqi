@@ -108,14 +108,9 @@ module.exports = async (req, res) => {
       });
     }
 
+    // First entry becomes the Stripe Checkout default. Standard ships
+    // for most customers; Pickup is an explicit opt-in for local folks.
     const shipping_options = [
-      {
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: 0, currency: 'usd' },
-          display_name: 'Pickup from Zach & Noah (no shipping)',
-        },
-      },
       {
         shipping_rate_data: {
           type: 'fixed_amount',
@@ -125,6 +120,13 @@ module.exports = async (req, res) => {
             minimum: { unit: 'business_day', value: 7 },
             maximum: { unit: 'business_day', value: 30 },
           },
+        },
+      },
+      {
+        shipping_rate_data: {
+          type: 'fixed_amount',
+          fixed_amount: { amount: 0, currency: 'usd' },
+          display_name: 'Pickup from Zach & Noah (no shipping)',
         },
       },
     ];
