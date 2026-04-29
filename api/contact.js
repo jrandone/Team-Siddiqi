@@ -1,6 +1,6 @@
 /**
  * POST /api/contact
- * Body: { name: string, email: string, topic?: string, message: string }
+ * Body: { name: string, email: string, message: string }
  *
  * If FORM_WEBHOOK_URL is set, the submission is forwarded there as JSON
  * (point it at a Zapier "Webhooks by Zapier" → Gmail, a Slack incoming
@@ -20,7 +20,6 @@ module.exports = async (req, res) => {
 
   const name = String(body.name || '').trim().slice(0, 120);
   const email = String(body.email || '').trim().toLowerCase().slice(0, 200);
-  const topic = String(body.topic || '').trim().slice(0, 80);
   const message = String(body.message || '').trim().slice(0, 4000);
 
   if (!name || !email || !message) {
@@ -32,7 +31,7 @@ module.exports = async (req, res) => {
 
   const payload = {
     type: 'contact',
-    name, email, topic, message,
+    name, email, message,
     source: req.headers.referer || 'unknown',
     userAgent: req.headers['user-agent'] || '',
     timestamp: new Date().toISOString(),
