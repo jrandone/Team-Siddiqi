@@ -108,25 +108,34 @@ module.exports = async (req, res) => {
       });
     }
 
-    const shipping_options = [
-      {
-        shipping_rate_data: {
-          type: 'fixed_amount',
-          fixed_amount: { amount: 999, currency: 'usd' },
-          display_name: 'Standard shipping',
-          delivery_estimate: {
-            minimum: { unit: 'business_day', value: 7 },
-            maximum: { unit: 'business_day', value: 30 },
+    // Customer picks shipping vs pickup in the cart drawer; we build the
+    // matching Stripe shipping option here. Pickup also skips shipping address
+    // collection (we only need email + phone to coordinate).
+    const shippingMethod = body.shippingMethod === 'pickup' ? 'pickup' : 'standard';
+    const shipping_options = shippingMethod === 'pickup'
+      ? [{
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: 0, currency: 'usd' },
+            display_name: 'Pickup from Noah & Zach',
           },
-        },
-      },
-    ];
+        }]
+      : [{
+          shipping_rate_data: {
+            type: 'fixed_amount',
+            fixed_amount: { amount: 999, currency: 'usd' },
+            display_name: 'Standard shipping',
+            delivery_estimate: {
+              minimum: { unit: 'business_day', value: 7 },
+              maximum: { unit: 'business_day', value: 30 },
+            },
+          },
+        }];
 
-    const session = await stripe.checkout.sessions.create({
+    const sessionParams = {
       mode: 'payment',
       payment_method_types: ['card'],
       line_items,
-      shipping_address_collection: { allowed_countries: ALLOWED_COUNTRIES },
       shipping_options,
       phone_number_collection: { enabled: true },
       automatic_tax: { enabled: false }, // flip to true once Stripe Tax is configured
@@ -136,12 +145,18 @@ module.exports = async (req, res) => {
       metadata: {
         type: 'order',
         item_count: String(items.reduce((s, i) => s + Number(i.quantity), 0)),
+        shipping_method: shippingMethod,
         cart_details: items
           .map(i => `${i.quantity}× ${i.tier} · ${i.color} · ${i.size}`)
           .join('; ')
           .slice(0, 500),
       },
-    });
+    };
+    // Only collect a shipping address when we're actually shipping
+    if (shippingMethod !== 'pickup') {
+      sessionParams.shipping_address_collection = { allowed_countries: ALLOWED_COUNTRIES };
+    }
+    const session = await stripe.checkout.sessions.create(sessionParams);
 
     return res.status(200).json({ url: session.url, id: session.id });
   } catch (err) {

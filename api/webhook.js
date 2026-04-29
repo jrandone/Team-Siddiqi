@@ -92,9 +92,12 @@ async function handleOrderCompleted(session, stripe) {
     year: 'numeric', month: 'long', day: 'numeric',
   });
 
+  const isPickup = (full.metadata && full.metadata.shipping_method) === 'pickup';
   const shippingDetails = full.shipping_details;
   let shippingTextPlain = '';
-  if (shippingDetails && shippingDetails.address) {
+  if (isPickup) {
+    shippingTextPlain = 'Pickup from Noah & Zach (no shipping)';
+  } else if (shippingDetails && shippingDetails.address) {
     const a = shippingDetails.address;
     shippingTextPlain = [
       shippingDetails.name,
@@ -124,7 +127,7 @@ async function handleOrderCompleted(session, stripe) {
       replyTo: REPLY_TO,
       subject: 'Thank you for your order — Team Siddiqi Enterprises',
       html: renderCustomerEmail({
-        customerName, orderId, orderDate, items, total, shippingTextPlain,
+        customerName, orderId, orderDate, items, total, shippingTextPlain, isPickup,
       }),
     });
   }
@@ -137,19 +140,22 @@ async function handleOrderCompleted(session, stripe) {
     html: renderMerchantEmail({
       customerName, customerEmail, customerPhone,
       orderId, orderDate, items, total,
-      shippingTextPlain, cartDetails, stripeDashUrl,
+      shippingTextPlain, isPickup, cartDetails, stripeDashUrl,
     }),
   });
 }
 
 // ---------- email rendering ----------
 
-function renderCustomerEmail({ customerName, orderId, orderDate, items, total, shippingTextPlain }) {
+function renderCustomerEmail({ customerName, orderId, orderDate, items, total, shippingTextPlain, isPickup }) {
   const itemsHtml = items.map((i) =>
     `<li><strong>${esc(i.name)}</strong> (Qty: ${i.qty}) — $${esc(i.price)}</li>`
   ).join('');
 
-  const shippingHtml = `<pre style="font-family: inherit; white-space: pre-line; margin: 0;">${esc(shippingTextPlain)}</pre>`;
+  const shippingLabel = isPickup ? 'Pickup' : 'Shipping Details';
+  const shippingHtml = isPickup
+    ? '<p>You chose pickup at Noah &amp; Zach&rsquo;s house. We&rsquo;ll reach out to coordinate a time.</p>'
+    : `<pre style="font-family: inherit; white-space: pre-line; margin: 0;">${esc(shippingTextPlain)}</pre>`;
 
   return `
 <div style="font-family: -apple-system, system-ui, sans-serif; color: #1a1614; max-width: 560px; line-height: 1.55;">
@@ -162,7 +168,7 @@ function renderCustomerEmail({ customerName, orderId, orderDate, items, total, s
   <p><strong>Items Ordered:</strong></p>
   <ul>${itemsHtml}</ul>
   <p><strong>Order Total:</strong> $${esc(total)}</p>
-  <p><strong>Shipping Details:</strong></p>
+  <p><strong>${esc(shippingLabel)}:</strong></p>
   ${shippingHtml}
   <p>If you have any questions about your order or need assistance, please feel free to contact our support team at
   <a href="mailto:${esc(SUPPORT_EMAIL)}">${esc(SUPPORT_EMAIL)}</a>.</p>
@@ -174,12 +180,14 @@ function renderCustomerEmail({ customerName, orderId, orderDate, items, total, s
 </div>`.trim();
 }
 
-function renderMerchantEmail({ customerName, customerEmail, customerPhone, orderId, orderDate, items, total, shippingTextPlain, cartDetails, stripeDashUrl }) {
+function renderMerchantEmail({ customerName, customerEmail, customerPhone, orderId, orderDate, items, total, shippingTextPlain, isPickup, cartDetails, stripeDashUrl }) {
   const itemsHtml = items.map((i) =>
     `<li>${esc(i.name)} — qty ${i.qty} — $${esc(i.price)}</li>`
   ).join('');
 
-  const shippingHtml = `<pre style="font-family: inherit; white-space: pre-line; background: #f5f0e8; padding: 12px; border: 1px solid #e6dfd0; border-radius: 4px; margin: 0;">${esc(shippingTextPlain)}</pre>`;
+  const shippingHtml = isPickup
+    ? `<p style="background: #fff8eb; padding: 12px; border-left: 3px solid #c8a24b; margin: 0;"><strong>PICKUP</strong> — customer chose pickup at the house. Coordinate with them (reply to this email).</p>`
+    : `<pre style="font-family: inherit; white-space: pre-line; background: #f5f0e8; padding: 12px; border: 1px solid #e6dfd0; border-radius: 4px; margin: 0;">${esc(shippingTextPlain)}</pre>`;
 
   const cartLine = cartDetails
     ? `<p style="background: #fff8eb; padding: 10px; border-left: 3px solid #c8a24b; margin: 12px 0;"><strong>Variant details (size · color):</strong> ${esc(cartDetails)}</p>`
@@ -206,7 +214,7 @@ function renderMerchantEmail({ customerName, customerEmail, customerPhone, order
   <ul>${itemsHtml}</ul>
   ${cartLine}
 
-  <h3>How to fulfill</h3>
+  <h3>${isPickup ? 'Pickup' : 'How to fulfill'}</h3>
   ${shippingHtml}
 
   <hr style="margin: 24px 0; border: none; border-top: 1px solid #e6dfd0;">

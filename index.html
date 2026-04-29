@@ -369,6 +369,22 @@
   .subtotal-row { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
   .subtotal-row.total { font-size: 16px; font-weight: 600; padding-top: 10px; border-top: 1px solid var(--line); margin-top: 10px; }
   .ship-note { font-size: 11px; color: var(--muted); margin-bottom: 16px; }
+  .ship-picker { margin-bottom: 18px; }
+  .ship-picker-label {
+    font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); margin-bottom: 8px;
+  }
+  .ship-opt {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border: 1px solid var(--line); cursor: pointer;
+    margin-bottom: 6px; transition: border-color 0.15s var(--ease), background 0.15s var(--ease);
+  }
+  .ship-opt:hover { border-color: var(--ink); }
+  .ship-opt input { margin: 0; accent-color: var(--ink); }
+  .ship-opt-name { flex: 1; font-size: 13px; }
+  .ship-opt-price { font-size: 13px; color: var(--muted); }
+  .ship-opt:has(input:checked) { border-color: var(--ink); background: rgba(13,13,13,0.03); }
+  .ship-opt:has(input:checked) .ship-opt-price { color: var(--ink); font-weight: 500; }
   .drawer-foot .btn-primary { width: 100%; justify-content: center; padding: 16px; }
   .keep-shopping {
     display: block; text-align: center; margin-top: 14px;
@@ -995,8 +1011,22 @@
     </div>
   </div>
   <div class="drawer-foot hidden" id="drawerFoot">
+    <div class="ship-picker">
+      <div class="ship-picker-label">Delivery</div>
+      <label class="ship-opt">
+        <input type="radio" name="shippingMethod" value="standard" checked>
+        <span class="ship-opt-name">Standard shipping</span>
+        <span class="ship-opt-price">$9.99</span>
+      </label>
+      <label class="ship-opt">
+        <input type="radio" name="shippingMethod" value="pickup">
+        <span class="ship-opt-name">Pickup from Noah &amp; Zach</span>
+        <span class="ship-opt-price">Free</span>
+      </label>
+    </div>
     <div class="subtotal-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
-    <div class="ship-note">Shipping, taxes, and discounts calculated at checkout.</div>
+    <div class="subtotal-row"><span>Shipping</span><span id="shippingDisplay">$9.99</span></div>
+    <div class="subtotal-row total"><span>Total</span><span id="totalDisplay">$0</span></div>
     <button class="btn-primary" onclick="openCheckout()">Checkout <span class="arrow">→</span></button>
     <a href="#" onclick="continueShopping();return false;" class="keep-shopping">← Continue Shopping</a>
   </div>
@@ -1201,6 +1231,8 @@
   let currentProduct = null;
   let currentTier = null;               // tier name string, e.g. 'Adult S–XL'
   let currentSize = null;
+  let shippingMethod = 'standard';      // 'standard' | 'pickup'
+  const SHIPPING_COSTS = { standard: 9.99, pickup: 0 };
   let checkoutMode = 'cart';            // 'cart' | 'donate'
   const donateState = { amount: 100, frequency: 'one-time', note: '' };
 
@@ -1246,9 +1278,15 @@
     const count = cart.reduce((s, i) => s + i.qty, 0);
     const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
     const give = cart.reduce((s, i) => s + i.give * i.qty, 0);
+    const shipCost = SHIPPING_COSTS[shippingMethod] || 0;
+    const total = subtotal + shipCost;
     document.getElementById('cartCount').textContent = count;
     document.getElementById('drawerCount').textContent = count;
-    document.getElementById('subTotal').textContent = '$' + subtotal;
+    document.getElementById('subTotal').textContent = '$' + subtotal.toFixed(2);
+    const shipDisplay = document.getElementById('shippingDisplay');
+    if (shipDisplay) shipDisplay.textContent = shipCost === 0 ? 'Free' : '$' + shipCost.toFixed(2);
+    const totalDisplay = document.getElementById('totalDisplay');
+    if (totalDisplay) totalDisplay.textContent = '$' + total.toFixed(2);
 
     const items = document.getElementById('cartItems');
     const foot = document.getElementById('drawerFoot');
@@ -1365,6 +1403,7 @@
     checkoutMode = 'cart';
     await startStripeCheckout({
       mode: 'payment',
+      shippingMethod,
       items: cart.map(i => ({
         tier: i.tier,
         color: i.color,
@@ -1558,6 +1597,14 @@
     // Defer the scroll a tick so the cart's close transition has started
     setTimeout(() => scrollToShop(), 50);
   }
+
+  // Shipping method radio handler
+  document.addEventListener('change', (e) => {
+    if (e.target && e.target.name === 'shippingMethod') {
+      shippingMethod = e.target.value;
+      renderCart();
+    }
+  });
 
   // Seed: initial render
   renderCart();
