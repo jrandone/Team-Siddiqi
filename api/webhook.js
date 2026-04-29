@@ -92,14 +92,9 @@ async function handleOrderCompleted(session, stripe) {
     year: 'numeric', month: 'long', day: 'numeric',
   });
 
-  // Pickup vs ship: pickup option is the $0 shipping rate
-  const shippingAmount = (full.shipping_cost && full.shipping_cost.amount_total) || 0;
-  const isPickup = shippingAmount === 0;
   const shippingDetails = full.shipping_details;
   let shippingTextPlain = '';
-  if (isPickup) {
-    shippingTextPlain = 'I will coordinate with Zach and Noah to pick up.';
-  } else if (shippingDetails && shippingDetails.address) {
+  if (shippingDetails && shippingDetails.address) {
     const a = shippingDetails.address;
     shippingTextPlain = [
       shippingDetails.name,
@@ -129,7 +124,7 @@ async function handleOrderCompleted(session, stripe) {
       replyTo: REPLY_TO,
       subject: 'Thank you for your order — Team Siddiqi Enterprises',
       html: renderCustomerEmail({
-        customerName, orderId, orderDate, items, total, shippingTextPlain, isPickup,
+        customerName, orderId, orderDate, items, total, shippingTextPlain,
       }),
     });
   }
@@ -142,21 +137,19 @@ async function handleOrderCompleted(session, stripe) {
     html: renderMerchantEmail({
       customerName, customerEmail, customerPhone,
       orderId, orderDate, items, total,
-      shippingTextPlain, isPickup, cartDetails, stripeDashUrl,
+      shippingTextPlain, cartDetails, stripeDashUrl,
     }),
   });
 }
 
 // ---------- email rendering ----------
 
-function renderCustomerEmail({ customerName, orderId, orderDate, items, total, shippingTextPlain, isPickup }) {
+function renderCustomerEmail({ customerName, orderId, orderDate, items, total, shippingTextPlain }) {
   const itemsHtml = items.map((i) =>
     `<li><strong>${esc(i.name)}</strong> (Qty: ${i.qty}) — $${esc(i.price)}</li>`
   ).join('');
 
-  const shippingHtml = isPickup
-    ? '<p>I will coordinate with Zach and Noah to pick up.</p>'
-    : `<pre style="font-family: inherit; white-space: pre-line; margin: 0;">${esc(shippingTextPlain)}</pre>`;
+  const shippingHtml = `<pre style="font-family: inherit; white-space: pre-line; margin: 0;">${esc(shippingTextPlain)}</pre>`;
 
   return `
 <div style="font-family: -apple-system, system-ui, sans-serif; color: #1a1614; max-width: 560px; line-height: 1.55;">
@@ -181,14 +174,12 @@ function renderCustomerEmail({ customerName, orderId, orderDate, items, total, s
 </div>`.trim();
 }
 
-function renderMerchantEmail({ customerName, customerEmail, customerPhone, orderId, orderDate, items, total, shippingTextPlain, isPickup, cartDetails, stripeDashUrl }) {
+function renderMerchantEmail({ customerName, customerEmail, customerPhone, orderId, orderDate, items, total, shippingTextPlain, cartDetails, stripeDashUrl }) {
   const itemsHtml = items.map((i) =>
     `<li>${esc(i.name)} — qty ${i.qty} — $${esc(i.price)}</li>`
   ).join('');
 
-  const shippingHtml = isPickup
-    ? '<p><strong>Pickup chosen.</strong> Coordinate with the customer (reply to this email).</p>'
-    : `<pre style="font-family: inherit; white-space: pre-line; background: #f5f0e8; padding: 12px; border: 1px solid #e6dfd0; border-radius: 4px; margin: 0;">${esc(shippingTextPlain)}</pre>`;
+  const shippingHtml = `<pre style="font-family: inherit; white-space: pre-line; background: #f5f0e8; padding: 12px; border: 1px solid #e6dfd0; border-radius: 4px; margin: 0;">${esc(shippingTextPlain)}</pre>`;
 
   const cartLine = cartDetails
     ? `<p style="background: #fff8eb; padding: 10px; border-left: 3px solid #c8a24b; margin: 12px 0;"><strong>Variant details (size · color):</strong> ${esc(cartDetails)}</p>`
