@@ -998,7 +998,7 @@
     <div class="subtotal-row"><span>Subtotal</span><span id="subTotal">$0</span></div>
     <div class="ship-note">Shipping, taxes, and discounts calculated at checkout.</div>
     <button class="btn-primary" onclick="openCheckout()">Checkout <span class="arrow">→</span></button>
-    <a href="#" onclick="closeCart();return false;" class="keep-shopping">← Keep Shopping</a>
+    <a href="#" onclick="continueShopping();return false;" class="keep-shopping">← Continue Shopping</a>
   </div>
 </aside>
 
@@ -1552,6 +1552,11 @@
 
   function scrollToShop() {
     document.getElementById('shop').scrollIntoView({ behavior: 'smooth' });
+  }
+  function continueShopping() {
+    closeCart();
+    // Defer the scroll a tick so the cart's close transition has started
+    setTimeout(() => scrollToShop(), 50);
   }
 
   // Seed: initial render
